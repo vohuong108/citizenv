@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  
+  $xs: 575.98px;   
+  $sm: 576px;  
+  $md: 768px;   
+  $lg: 992px;     
+  $xl: 1200px;  
+  $xxl: 1400px;   
+  
+  // media queries
+  
+  @mixin Responsive($canvas) {
+      @if $canvas == xs {
+          @media only screen and (max-width: $xs) { @content; } 
+      }
+      @else if $canvas == sm {
+          @media only screen and (min-width: $sm) { @content; } 
+      }
+      @else if $canvas == md {
+          @media only screen and (min-width: $md) { @content; } 
+      }
+      @else if $canvas == lg {
+          @media only screen and (min-width: $lg) { @content; } 
+      }
+      @else if $canvas == xl {
+          @media only screen and (min-width: $xl) { @content; } 
+      }
+      @else if $canvas == xxl {
+          @media only screen and (min-width: $xxl) { @content; } 
+      }
+  }
