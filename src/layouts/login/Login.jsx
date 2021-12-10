@@ -3,15 +3,55 @@ import { LockFilled, UserOutlined} from '@ant-design/icons'
 import { Spin, message, Row, Col } from 'antd';
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from 'axios';
 
 // import image
 import logo from "../../assets/image/logo.png";
-
+// 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const { register, handleSubmit } = useForm();
 
-    const onSubmit = async (data) => {}
+    const onSubmit = async () => {
+
+        // let result = await axios({
+        //     method: 'GET',
+        //     url: `https://provinces.open-api.vn/api/?depth=3`
+        // });
+
+        // let data = result.data.map((pro, ind) => {
+        //     let cityName = pro.name;
+        //     let cityId = ind + 1;
+        //     let districts = pro.districts.map((dis, indDis) => {
+        //         let districtName = dis.name;
+        //         let districtId = indDis + 1;
+
+        //         let wards = dis.wards.map((w, indW) => {
+        //             let wardName = w.name;
+        //             let wardId = indW + 1;
+
+        //             return {wardName, wardId};
+        //         })
+
+        //         return {districtName, districtId, wards};
+        //     });
+
+        //     return {cityName, cityId, districts};
+        // })
+
+        // console.log("data input: ", data);
+
+        let response = await axios({
+            method: 'POST',
+            url: 'https://f884-2001-ee0-41a1-792f-517d-468e-3b8b-e543.ngrok.io/user/login',
+            data: {
+                username: 'admin',
+                password: 'admin'
+            }
+        });
+           
+        console.log("response: ", response);
+    }
 
 
     return (
@@ -50,7 +90,7 @@ const Login = () => {
                                                     <input 
                                                         name="password" 
                                                         type="password"
-                                                        placeholder="Enter your password" 
+                                                        placeholder="Nhập mật khẩu" 
                                                         {...register("password")}
                                                         required 
                                                     />

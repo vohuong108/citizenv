@@ -1,0 +1,28 @@
+.slide-left {
+    background-color: #F0F3F5; 
+
+    .ant-layout-sider-children {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .ant-layout-sider-zero-width-trigger {
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+    }
+}
+
+.menu_item {
+    padding-left: 40px !important;
+
+    a {
+        display: block;
+    }
+}
+
+.menu_item:hover {
+    background-color: #FAFAFA;
+}
