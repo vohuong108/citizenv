@@ -18,7 +18,7 @@
         height: 80px;
         width: 80px;
         border-radius: 50%;
-        background-image: url(../../material/logo.jpg);
+        // background-image: url(../../material/logo.jpg);
       }
       span {
         font-size: xx-large;
@@ -37,6 +37,8 @@
         font-weight: bolder;
         color: white;
         padding-right: 20px;
+        border: none;
+        background: none;
       }
       .btn:hover {
         color: yellowgreen;
