@@ -1,173 +1,168 @@
 .login {
-    background-color: #F0F3F5;
+  background-color: #f0f3f5;
+  margin-top: 50px;
+  .login-container {
+    @include Responsive(xs) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
 
-    .login-container {
-        @include Responsive(xs) {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
+  .login-row {
+    justify-content: center;
+    padding: 50px 0;
+  }
+
+  .login-wrap {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 12px 0 #afafaf;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+
+    h1 {
+      text-align: center;
+      font-weight: bold;
+      padding: 30px;
+      font-size: 25px;
+      line-height: 1.2;
+
+      @include Responsive(xs) {
+        font-size: 20px;
+      }
+      @include Responsive(sm) {
+        font-size: 20px;
+      }
     }
 
-    .login-row {
-        justify-content: center;
-        padding: 50px 0;
+    .cus-wrap {
+      @include Responsive(xs) {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+      @include Responsive(sm) {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+    }
+  }
+
+  .login-inner {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .inner-left {
+    width: 100%;
+
+    p {
+      color: #73818f;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 21px;
+      font-weight: 500;
+      line-height: 1.2;
+
+      @include Responsive(xs) {
+        font-size: 16px;
+      }
+      @include Responsive(sm) {
+        font-size: 16px;
+      }
     }
 
-    .login-wrap {
-        background: #fff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 0 12px 0 #afafaf;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 960px;
+    img {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
 
-        h1 {
-            text-align: center;
-            font-weight: bold;
-            padding: 30px;
-            font-size: 25px;
-            line-height: 1.2;
+  .inner-right {
+    h3 {
+      color: rgb(31, 31, 31);
+      font-size: 34px;
+      line-height: 42px;
+      text-align: center;
+      font-weight: 400;
+      margin-bottom: 40px;
 
-            @include Responsive(xs) {
-                font-size: 20px;
-            }
-            @include Responsive(sm) {
-                font-size: 20px;
-            }
-        }
-
-        .cus-wrap {
-            @include Responsive(xs) {
-                padding-left: 8px;
-                padding-right: 8px;
-            }
-            @include Responsive(sm) {
-                padding-left: 8px;
-                padding-right: 8px;
-            }
-        }
+      @include Responsive(xs) {
+        font-size: 24px;
+      }
+      @include Responsive(sm) {
+        font-size: 24px;
+      }
     }
 
-
-    .login-inner {
-        display: flex;
-        justify-content: space-around;
+    form label {
+      text-align: left;
+      display: block;
+      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
-    .inner-left {
-        width: 100%;
+    .input-wrap {
+      background-color: #e6e6e6;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
 
-        p {
-            color: #73818f;
-            text-align: center;
-            margin-top: 15px;
-            font-size: 21px;
-            font-weight: 500;
-            line-height: 1.2;
-
-            @include Responsive(xs) {
-                font-size: 16px;
-            }
-            @include Responsive(sm) {
-                font-size: 16px;
-            }
-        }
-
-        img {
-            width: 100%;
-            max-width: 250px;
-        }
-
+      .input-icon {
+        color: rgb(163, 156, 156);
+        margin-left: 15px;
+        font-size: 1rem;
+      }
     }
+  }
 
-    .inner-right {
+  input {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    height: 52px;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 15px;
+    width: 100%;
+  }
 
-        h3{
-            color: rgb(31, 31, 31);
-            font-size: 34px;
-            line-height: 42px;
-            text-align: center;
-            font-weight: 400;
-            margin-bottom: 40px;
+  input:-internal-autofill-previewed,
+  input:-internal-autofill-selected {
+    transition: background-color 10000s ease-in-out 0s !important;
+  }
 
-            @include Responsive(xs) {
-                font-size: 24px;
-            }
-            @include Responsive(sm) {
-                font-size: 24px;
-            }
-        }
+  a {
+    text-decoration: none;
+    color: #2a73cc;
+    display: block;
+    margin-bottom: 15px;
+  }
 
-        form label {
-            text-align: left;
-            display: block;
-            margin-bottom: 10px;
-            margin-top: 10px;
-        }
+  .form-btn {
+    cursor: pointer;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 35px 35px;
+    padding: 0 25px;
+    background: linear-gradient(90deg, #48b1bf, #677ebd);
+  }
 
-        .input-wrap {
-            background-color: #e6e6e6;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-    
-            .input-icon {
-                color: rgb(163, 156, 156);
-                margin-left: 15px;
-                font-size: 1rem;
-            }
-        }
+  .submit-btn {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #fff;
+    height: 52px;
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: all 0.5s;
+
+    &:hover {
+      color: #23282c;
     }
-
-    input {
-        background-color: transparent;
-        outline: none;
-        border: none;
-        height: 52px;
-        font-size: 15px;
-        line-height: 1.5;
-        margin: 0 15px;
-        width: 100%;
-    }
-
-    input:-internal-autofill-previewed,
-    input:-internal-autofill-selected {
-        transition: background-color 10000s ease-in-out 0s !important;
-    }
-
-    a {
-        text-decoration: none;
-        color: #2A73CC;
-        display: block;
-        margin-bottom: 15px;
-    }
-
-    
-
-    .form-btn {
-        cursor: pointer;
-        border-radius: 25px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 35px 35px;
-        padding: 0 25px;
-        background: linear-gradient(90deg,#48b1bf,#677ebd);
-    }
-
-    .submit-btn {
-        font-size: 15px;
-        line-height: 1.5;
-        color: #fff;
-        height: 52px;
-        width: 100%;
-        text-transform: uppercase;
-        font-weight: 600;
-        transition: all 0.5s;
-
-        &:hover {
-            color: #23282c;
-        }
-    }
+  }
 }

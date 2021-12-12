@@ -60,7 +60,8 @@ const Login = () => {
                 <div className="row login-row">
                     <div className="login-wrap">
                         <Spin tip="Loading..." spinning={loading}>
-                            <h1>CitizenV - Tổng cục dân số</h1>
+                            <span><br/></span>
+                            
                             <div className="cus-wrap">
                                 <Row className="login-inner" gutter={{xs: 16, sm: 16}}>
                                     <Col xs={24} sm={10}>

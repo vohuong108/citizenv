@@ -1,36 +1,55 @@
 .App {
-    text-align: center;
-    height: 100%;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  //   .Header {
+  //     position: absolute;
+  //     top: 0;
+  //     width: 100%;
+  //   }
+  //   .Footer {
+  //     position: absolute;
+  //     bottom: 0;
+  //   }
 }
 
-$xs: 575.98px;   
-$sm: 576px;  
-$md: 768px;   
-$lg: 992px;     
-$xl: 1200px;  
-$xxl: 1400px;   
-  
-  // media queries
-  
+$xs: 575.98px;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;
+
+// media queries
+
 @mixin Responsive($canvas) {
-    @if $canvas == xs {
-        @media only screen and (max-width: $xs) { @content; } 
+  @if $canvas == xs {
+    @media only screen and (max-width: $xs) {
+      @content;
     }
-    @else if $canvas == sm {
-        @media only screen and (min-width: $sm) { @content; } 
+  } @else if $canvas == sm {
+    @media only screen and (min-width: $sm) {
+      @content;
     }
-    @else if $canvas == md {
-        @media only screen and (min-width: $md) { @content; } 
+  } @else if $canvas == md {
+    @media only screen and (min-width: $md) {
+      @content;
     }
-    @else if $canvas == lg {
-        @media only screen and (min-width: $lg) { @content; } 
+  } @else if $canvas == lg {
+    @media only screen and (min-width: $lg) {
+      @content;
     }
-    @else if $canvas == xl {
-        @media only screen and (min-width: $xl) { @content; } 
+  } @else if $canvas == xl {
+    @media only screen and (min-width: $xl) {
+      @content;
     }
-    @else if $canvas == xxl {
-        @media only screen and (min-width: $xxl) { @content; } 
+  } @else if $canvas == xxl {
+    @media only screen and (min-width: $xxl) {
+      @content;
     }
+  }
 }
 
 //Import scss from all components

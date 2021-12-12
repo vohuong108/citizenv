@@ -16,7 +16,9 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Header />
+        <div className='Header'>
+          <Header />
+        </div>
         <Routes>
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
@@ -27,7 +29,7 @@ function App() {
             <Route path={`population`} element={<ViewPopulation />} />
           </Route>
         </Routes>
-        <Footer/>
+        <div class="Footer"><Footer/></div>
       </div>
     </BrowserRouter>
   );

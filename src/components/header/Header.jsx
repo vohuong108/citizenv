@@ -1,5 +1,6 @@
 import React from 'react'
 import '../../assets/styles/Header.scss'
+import {Link} from "react-router-dom";
 
 function Header() {
     return (
@@ -10,10 +11,20 @@ function Header() {
                     <span>Tổng cục dân số Việt Nam</span>
                 </span>
                 <span className="header_right">
-                    <button className='btn'>Trang chủ</button>
+                    <Link to="/home">
+                    <button className='btn' >Trang chủ</button>
+                    </Link>
+                    
                     <button className="btn">Thông tin</button>
                     <button className="btn">Tra cứu</button>
-                    <button className="btn">Đăng nhập</button>
+                    <Link to="/register">
+                    <button className="btn">Đăng Ký</button>
+                    </Link>
+                    <Link to="/login">
+                    <button className="btn">Đăng Nhập</button>
+                    </Link>
+                   
+
                 </span>
             </div>
         </div>
