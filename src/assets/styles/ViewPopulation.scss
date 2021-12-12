@@ -1,0 +1,14 @@
+.view-population {
+    .name,.gender,.career {
+        text-transform: capitalize;
+    }
+
+    .view-table-option-wrap{
+        background-color: #fff;
+        border-radius: 6px;
+        box-shadow: rgba(0, 0, 0, 0.043) 0px 3px 20px 0px;
+
+        @include Responsive(xs) {padding: 14px;}
+        @include Responsive(xl) {padding: 20px;}
+    }
+}

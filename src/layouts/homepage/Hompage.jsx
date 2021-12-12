@@ -1,10 +1,7 @@
 import React from 'react';
 import Slide from './Slide';
 import { Layout } from 'antd';
-import Account from '../account/Account';
-import Analysis from '../analysis/Analysis';
-import ViewPopulation from '../view/ViewPopulation';
-import { Route, useMatch, Routes, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const Hompage = () => {
     return (
@@ -12,7 +9,9 @@ const Hompage = () => {
             <Layout className="hompage-layout">
                 <Slide />
                 <Layout.Content>
-                    <Outlet />
+                    <div className="hompage-layout-content-wrap">
+                        <Outlet />
+                    </div>
                 </Layout.Content>
             </Layout>
         </div>
