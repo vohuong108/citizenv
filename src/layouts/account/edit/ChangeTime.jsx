@@ -31,7 +31,12 @@ const ChangeTime = () => {
                                 control={control}
                                 rules={{ required: true }}
                                 render={({ field }) => 
-                                    <DatePicker value={field.value} showTime onChange={(date) => field.onChange(date)}/>
+                                    <DatePicker 
+                                        className="change-time-date-picker" 
+                                        value={field.value} 
+                                        showTime 
+                                        onChange={(date) => field.onChange(date)}
+                                    />
                                 }
                             />
                             {errors.release_date?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày bắt đầu</p>}
@@ -43,7 +48,12 @@ const ChangeTime = () => {
                                 control={control}
                                 rules={{ required: true }}
                                 render={({ field }) => 
-                                    <DatePicker value={field.value} showTime onChange={(date) => field.onChange(date)}/>
+                                    <DatePicker 
+                                        className="change-time-date-picker"
+                                        value={field.value} 
+                                        showTime 
+                                        onChange={(date) => field.onChange(date)}
+                                    />
                                 }
                             />
                             {errors.finish_date?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày kết thúc</p>}

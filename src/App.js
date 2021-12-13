@@ -9,6 +9,8 @@ import Home from './layouts/homepage/Home';
 import Account from './layouts/account/Account';
 import Analysis from './layouts/analysis/Analysis';
 import ViewPopulation from './layouts/view/ViewPopulation';
+import PublicRoute from './routes/PublicRoute';
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
   return (
@@ -16,8 +18,13 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/login" element={<PublicRoute />}>
+            <Route exact path='/login' element={<Login/>}/>
+          </Route>
+          <Route exact path="/register" element={<PrivateRoute />}>
+            <Route exact path='/register' element={<Login/>}/>
+          </Route>
+          
           <Route path="/home" element={<Hompage />} >
             <Route index element={<Home />} />
             <Route path={`account`} element={<Account />} />

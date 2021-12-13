@@ -39,6 +39,8 @@
 
             .start-label,.end-label {
                 margin-right: 15px;
+
+                @include Responsive(xs) { margin-bottom: 8px;}
             }
 
             label {
@@ -113,5 +115,13 @@
         .err-msg {
             color: red;
         }
+    }
+}
+
+
+.ant-picker-datetime-panel {
+    @include Responsive(xs) {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }

@@ -64,7 +64,7 @@ const ViewPopulation = () => {
 
     return (
         <div className="view-population">
-            <h2>Danh sách dân số</h2>
+            <h2>DANH SÁCH THÔNG TIN DÂN SỐ</h2>
             <div className="view-table-option-wrap">
                 <ViewOption />
                 <Divider />

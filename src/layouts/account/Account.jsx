@@ -5,9 +5,11 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
+
 //import icon and images
 import  { ReactComponent as SearchIcon } from '../../assets/icons/search-solid.svg';
 import { EditOutlined } from '@ant-design/icons';
+import ExportData from '../../components/export/ExportData';
 
 const data = [
     {name: 'Hà Nội', username: '01', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
@@ -122,7 +124,7 @@ const Account = () => {
 
     return (
         <div className="account">
-            <h2>Danh sách tài khoản</h2>
+            <h2>DANH SÁCH QUẢN LÝ TÀI KHOẢN</h2>
             <Row className="account-utils">
                 <Col>
                     <EditAccount 
@@ -137,6 +139,7 @@ const Account = () => {
                     <Link to="/register">
                         <button className="btn-create-account">Cấp tài khoản</button>
                     </Link>
+                    <ExportData placement="bottomRight" data={data}/>
                 </Col>
             </Row>
             <Table 

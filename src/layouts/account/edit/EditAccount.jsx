@@ -26,6 +26,7 @@ const EditAccount = ({
                 Chỉnh sửa
             </Button>
             <Drawer
+                className="drawer-edit-account"
                 placement='right'
                 width="40%"
                 title={title}
