@@ -4,6 +4,7 @@ import { Table, Tag, Row, Col, Input, Space, Button } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import Printer, { print } from 'react-pdf-print'
 
 
 //import icon and images
@@ -31,6 +32,7 @@ const Account = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
+    const [filterData, setFilterData] = useState([]);
 
     const onSelectChange = (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -94,16 +96,20 @@ const Account = () => {
             ...getColumnSearchProps("username")
         }, {
             title: 'Cấp bậc',
-            dataIndex: "level"
+            dataIndex: "level",
+            align: 'center',
         }, {
             title: 'Bắt đầu khai báo',
-            dataIndex: "startTime"
+            dataIndex: "startTime",
+            align: 'center',
         }, {
             title: 'Kết thúc khai báo',
-            dataIndex: "endTime"
+            dataIndex: "endTime",
+            align: 'center',
         }, {
             title: 'Trạng thái',
             dataIndex: "state",
+            align: 'center',
             filters: [
                 {
                   text: 'Active',
@@ -118,6 +124,7 @@ const Account = () => {
             render: (state) => state === 'Active' ? <Tag color='cyan'>{state}</Tag> : <Tag color='#f50'>{state}</Tag>
         }, {
             title: 'Hành động',
+            align: 'center',
             render: (text) => <EditAccount shape="default" icon={<EditOutlined />} />,
         }
     ];
@@ -139,15 +146,18 @@ const Account = () => {
                     <Link to="/register">
                         <button className="btn-create-account">Cấp tài khoản</button>
                     </Link>
-                    <ExportData placement="bottomRight" data={data}/>
+                    <ExportData placement="bottomRight" data={filterData}/>
                 </Col>
             </Row>
-            <Table 
+            <Printer>
+            <Table
                 rowSelection={{onChange: onSelectChange}} 
                 columns={columns} 
                 dataSource={data}
                 rowKey="username"
+                onChange={(a, b, c, extra) => { setFilterData(extra.currentDataSource) }} 
             />
+            </Printer>
         </div>
     )
 }

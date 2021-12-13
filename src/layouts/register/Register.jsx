@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Select } from 'antd';
+import { Select, Divider, Input, } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useForm, Controller } from "react-hook-form";
 
 const Register = () => {
@@ -7,7 +8,7 @@ const Register = () => {
     const { control, register, handleSubmit, setValue, formState: { errors }, setError } = useForm();
     
     let user = {
-        userRole: 'A1',
+        userRole: 'B1',
         username: "1"
     }
     const onSubmit = async (data) => {
@@ -21,10 +22,6 @@ const Register = () => {
     }
 
     useEffect(() => {
-        let user = {
-            userRole: 'A1',
-            id: "1"
-        }
 
         if(user.userRole === 'A1') {
             setAccountLevel('Tỉnh/Thành');
@@ -47,7 +44,12 @@ const Register = () => {
                     <form id="form-register" onSubmit={handleSubmit(onSubmit)} >
                         <div className="form-item">
                             <label className="label-select" >{accountLevel}</label>
-                            <SelectLocation accId={user.username} setValue={setValue} control={control}/>
+                            <SelectLocation 
+                                accId={user?.username} 
+                                setValue={setValue} 
+                                control={control} 
+                                userRole={user?.userRole}
+                            />
                         </div>
                         {errors.unit && <p className="err-msg">{errors.unit.message}</p>}
 
@@ -80,7 +82,7 @@ const Register = () => {
                                         onChange={(value) => field.onChange(value)}
                                         defaultValue='active'
                                     >
-                                        <Select.Option key={1} value={'active'}>Active</Select.Option>
+                                        <Select.Option key={1} value={'active'} >Active</Select.Option>
                                         <Select.Option key={2} value={'inactive'}>InActive</Select.Option>
                                     </Select>
                                 }
@@ -95,43 +97,110 @@ const Register = () => {
     )
 }
 
-const SelectLocation = ({ accId, setValue, control }) => {
+const SelectLocation = ({ accId, setValue, control, userRole }) => {
     const [data, setData] = useState([
         {id: 1, name: "hà nội"},
         {id: 2, name: "đà nẵng"},
         {id: 3, name: "hồ chí minh"},
-    ])
+    ]);
+
+    const nextId = 4;
 
     const onSearch = (value) => {}
 
     useEffect(() => {
 
     }, [accId])
-    return (            
-        <Controller 
-            name="unit"
-            control={control}
-            rules={{ required: "Vui lòng chọn đơn vị được cấp tài khoản."}}
-            render={({ field }) =>
-                <Select
-                    showSearch
-                    placeholder="Vui lòng chọn"
-                    optionFilterProp="children"
-                    onChange={(value) => {
-                        field.onChange(value); 
-                        setValue("username", value);
+    return (      
+        userRole === 'B1' ? (
+            <Controller
+                name="unit"
+                control={control}
+                rules={{ required: "Vui lòng chọn đơn vị được cấp tài khoản."}}
+                render={({ field }) =>
+                    <SelectAppend 
+                        data={data} 
+                        nextId={nextId} 
+                        field={field} 
+                        setValue={setValue}
+                    />
+                }
+            />
+        ) : (
+            <Controller 
+                name="unit"
+                control={control}
+                rules={{ required: "Vui lòng chọn đơn vị được cấp tài khoản."}}
+                render={({ field }) =>
+                    <Select
+                        showSearch
+                        placeholder="Vui lòng chọn"
+                        optionFilterProp="children"
+                        onChange={(value) => {
+                            field.onChange(value); 
+                            setValue("username", value);
+                        }}
+                        onSearch={onSearch}
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                    >
+                        {data?.map((obj, ind) => (
+                            <Select.Option key={ind} value={obj.id}>{obj.name}</Select.Option>
+                        ))}
+                    </Select>
+                }
+            />
+        )
+    )
+}
+
+const SelectAppend = ({ data, nextId, setValue, field }) => {
+    const [accData, setAccData] = useState([...data]);
+    const [inputValue, setInputValue] = useState("");
+
+    useEffect(() => {}, [data])
+    return (
+        <Select
+            style={{ width: 240 }}
+            placeholder="Vui lòng thêm đơn vị"
+            onChange={(value) => {
+                field.onChange(value); 
+                setValue("username", nextId);
+            }}
+            dropdownRender={menu => (
+            <div>
+                {menu}
+                <Divider style={{ margin: '4px 0' }} />
+                <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+                <Input 
+                    style={{ flex: 'auto' }} 
+                    value={inputValue} 
+                    onChange={(e) => {
+                        setInputValue(e.target.value);
+                        console.log("value: ", inputValue);
                     }}
-                    onSearch={onSearch}
-                    filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
+                    />
+                <a
+                    style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
+                    onClick={() => setAccData([...accData, {id: nextId, name: inputValue}])}
                 >
-                    {data?.map((obj, ind) => (
-                        <Select.Option key={ind} value={obj.id}>{obj.name}</Select.Option>
-                    ))}
-                </Select>
-            }
-        />
+                    <PlusOutlined /> Thêm
+                </a>
+                </div>
+            </div>
+            )}
+        >
+                {accData?.map((item, ind) => (
+                    <Select.Option 
+                        key={ind} 
+                        disabled={item?.id !== nextId ? true : false}
+                        value={item?.name}
+                    >
+                        {item?.name}
+                    </Select.Option>
+                ))}
+        </Select>
     )
 }
 

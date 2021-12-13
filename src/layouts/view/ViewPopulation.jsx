@@ -1,6 +1,7 @@
-import { Button, Table, Select, Row, Col, Divider } from 'antd';
-import React from 'react';
+import { Button, Table, Divider } from 'antd';
+import React, { useState } from 'react';
 import ViewOption from './ViewOption';
+import ViewPersonal from './ViewPersonal';
 
 
 const data = [
@@ -20,6 +21,7 @@ const data = [
 
 
 const ViewPopulation = () => {
+    const [filterData, setFilterData] = useState([...data]);
 
     const columns = [
         {
@@ -58,7 +60,7 @@ const ViewPopulation = () => {
         }, {
             title: 'Hành động',
             align: 'center',
-            render: (text) => <Button>Xem thông tin</Button>
+            render: (text) => <ViewPersonal />
         },
     ];
 
@@ -66,12 +68,13 @@ const ViewPopulation = () => {
         <div className="view-population">
             <h2>DANH SÁCH THÔNG TIN DÂN SỐ</h2>
             <div className="view-table-option-wrap">
-                <ViewOption />
+                <ViewOption filterData={filterData}/>
                 <Divider />
                 <Table
                     columns={columns} 
                     dataSource={data}
                     rowKey="personalId"
+                    onChange={(a, b, c, extra) => { setFilterData(extra.currentDataSource) }} 
                 />
             </div>
         </div>

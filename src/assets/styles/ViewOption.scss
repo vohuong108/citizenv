@@ -45,6 +45,12 @@
                 justify-content: space-between;
             }
         }
+
+        .export-col {
+            margin-left: auto;
+
+            @include Responsive(xs) { display: none; }
+        }
     }
 
 

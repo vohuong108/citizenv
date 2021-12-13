@@ -29,7 +29,7 @@ const EditAccount = ({
                 className="drawer-edit-account"
                 placement='right'
                 width="40%"
-                title={title}
+                title={<h2 style={{marginBottom: 0}}>{title}</h2>}
                 visible={visible}
                 onClose={() => setVisible(false)}
                 forceRender={true}

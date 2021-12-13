@@ -27,3 +27,21 @@
     width: 38px;
     
 }
+
+.btn-single-export {
+    border-radius: 6px !important;
+    height: 38px!important;
+    border-color: rgba(226,232,240,1);
+    color: rgba(74,85,104,1);
+    font-weight: 500;
+    font-size: 14px;
+
+    &:hover {
+        background-color: rgba(226,232,240, 0.2);
+    }
+
+    .btn-export-csv{
+        color: #000;
+    }
+}
+

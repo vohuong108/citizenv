@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Select, } from 'antd';
 
 import { ReactComponent as ArrowDown } from '../../assets/icons/arrow-down.svg';
+import ExportData from '../../components/export/ExportData';
 
 const provinces = [
     {value: 'Hà Nội'}, {value: 'Hải Phòng'}, {value:'Hồ Chí Minh'}, 
@@ -24,7 +25,7 @@ const hamlets = [
     {value: 'Hà Tĩnh'}, {value: 'Quảng Bình'}, {value:'Quảng Trị'},
 ]
 
-const ViewOption = () => {
+const ViewOption = ({ filterData }) => {
     const [level, setLevel] = useState();
     const [province, setProvince] = useState([]);
     const [district, setDistrict] = useState();
@@ -49,6 +50,9 @@ const ViewOption = () => {
                     </Select>
                 </Col>
                 <Col className="level-col btn-col" ><button className="btn-search">Tìm Kiếm</button></Col>
+                <Col className="level-col export-col">
+                    <ExportData placement="bottomRight" data={filterData} type = "single"/>
+                </Col>
             </Row>
             {(level && level !== 'country') && 
             <Row className="view-option-row option-row" gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]}>
@@ -104,8 +108,9 @@ const ViewOption = () => {
                     />
                 </Col>}
             </Row>}
-            <Row className="btn-row-xs">
-                <Col span={24}><button className="btn-search">Tìm Kiếm</button></Col>
+            <Row className="btn-row-xs" style={{alignItems: 'center'}}>
+                <Col span={12}><ExportData placement="bottomRight" data={filterData} type = "single"/></Col>
+                <Col span={12}><button className="btn-search">Tìm Kiếm</button></Col>
             </Row>
         </div>
     )

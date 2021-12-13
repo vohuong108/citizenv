@@ -3,6 +3,8 @@
         text-align: center;
         padding-top: 20px;
         padding-bottom: 20px;
+
+        @include Responsive(xs) { font-size: 18px; }
     }
     .name,.gender,.career {
         text-transform: capitalize;

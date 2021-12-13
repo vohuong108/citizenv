@@ -3,21 +3,20 @@ import { List, Popover, Button } from 'antd';
 import { FileExcelOutlined, PrinterOutlined, PlusOutlined } from '@ant-design/icons';
 import { CSVLink } from 'react-csv';
 
-const ExportData = ({ title = "", placement, data}) => {
+const ExportData = ({ title = "", placement, data, type = "multiple"}) => {
+    console.log("export data: ", data);
+
     const content = (
         <List className="list-export">
             <List.Item className="list-export-item">
-                <FileExcelOutlined style={{marginRight: '8px'}}/>
+                <FileExcelOutlined style={{marginRight: '8px', color: 'green'}}/>
                 <CSVLink className="btn-export-csv" data={data} filename={"filename"}>Export CSV</CSVLink>
-            </List.Item>
-            <List.Item className="list-export-item">
-                <PrinterOutlined style={{marginRight: '8px'}}/>
-                Print
             </List.Item>
         </List>
     )
     return (
-        <Popover 
+        type === "multiple" 
+        ? (<Popover 
             overlayClassName="export-data" 
             content={content} 
             placement={placement} 
@@ -29,6 +28,10 @@ const ExportData = ({ title = "", placement, data}) => {
                 icon={<PlusOutlined />}
             >{title}</Button>
         </Popover>
+        ) : (
+        <Button className="btn-single-export" icon={<FileExcelOutlined style={{marginRight: '8px', color: 'green'}}/>}>
+            <CSVLink className="btn-export-csv" data={data} filename={"filename"}>Export CSV</CSVLink>
+        </Button>)
     )
 }
 
