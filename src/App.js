@@ -10,6 +10,7 @@ import Home from './layouts/homepage/Home';
 import Account from './layouts/account/Account';
 import Analysis from './layouts/analysis/Analysis';
 import ViewPopulation from './layouts/view/ViewPopulation';
+import Form from './layouts/form/Form';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Header />
         </div>
         <Routes>
+          <Route exact path="/form" element={<Form />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route path="/home" element={<Hompage />} >
