@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import { Divider, Layout, Menu } from 'antd';
 import { Link, useLocation, useMatch} from 'react-router-dom';
 
 //import icon image
@@ -34,7 +34,8 @@ const Slide = ({ course }) => {
                     fontSize: '16px',
                     backgroundColor: '#1c3faa',
                     paddingLeft: '5px',
-                    paddingRight: '5px'
+                    paddingRight: '5px',
+                    paddingTop: '10px',
                 }}
             >
                 <Menu.Item className="menu_item" key="account" icon={<AccountIcon width="20px"/>}>

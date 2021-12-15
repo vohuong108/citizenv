@@ -8,6 +8,11 @@ const userApi = {
         const url = `${final_base}/login`
         const response = await axios.post(url, data);
         return response.data;
+    },
+    getUserInfo: async (data) => {
+        const url = `${final_base}/login`
+        const response = await axios.post(url, data);
+        return response.data;
     }
 }
 

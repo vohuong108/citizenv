@@ -8,3 +8,11 @@ export const login = createAsyncThunk(
         return res;
     }
 )
+
+export const getUserInfo = createAsyncThunk(
+    'user/getUserInfo',
+    async (requestData) => {
+        const res = await userApi.getUserInfo(requestData);
+        return res;
+    }
+)

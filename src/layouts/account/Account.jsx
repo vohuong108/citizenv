@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import EditAccount from './edit/EditAccount';
-import { Table, Tag, Row, Col, Input, Space, Button } from 'antd';
+import { Table, Tag, Row, Col, Input, Collapse } from 'antd';
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, CaretRightOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import Printer, { print } from 'react-pdf-print'
 
 
 //import icon and images
@@ -149,15 +148,37 @@ const Account = () => {
                     <ExportData placement="bottomRight" data={filterData}/>
                 </Col>
             </Row>
-            <Printer>
             <Table
+                className="account-table"
                 rowSelection={{onChange: onSelectChange}} 
                 columns={columns} 
                 dataSource={data}
                 rowKey="username"
                 onChange={(a, b, c, extra) => { setFilterData(extra.currentDataSource) }} 
             />
-            </Printer>
+            <Collapse 
+                className="account-collapse"
+                accordion
+                expandIcon={({ isActive }) => <CaretRightOutlined style={{color: '#06e9ed'}} rotate={isActive ? 90 : 0} />}
+            >
+                {data.map((item, ind) => 
+                    <Collapse.Panel 
+                        style={{textAlign: 'left'}} 
+                        header={`${item.username} - ${item.name}`} 
+                        key={ind}
+                    >
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Tên đơn vị: ${item.name}`}</p>
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Mã đơn vị: ${item.username}`}</p>
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Cấp bậc: ${item.level}`}</p>
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Bắt đầu khai báo: ${item.startTime}`}</p>
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Kết thúc khai báo: ${item.endTime}`}</p>
+                        {item.state.toLocaleLowerCase() === 'active' 
+                        ? <p style={{fontWeight: '500', marginBottom: '16px'}}>{"Trạng thái: "}<Tag color='cyan'>{item.state}</Tag></p>
+                        : <p style={{fontWeight: '500', marginBottom: '16px'}}>{"Trạng thái: "}<Tag color='#f50'>{item.state}</Tag></p>}
+                        <EditAccount shape="default" icon={<EditOutlined />} />
+                    </Collapse.Panel>
+                )}
+            </Collapse>
         </div>
     )
 }

@@ -22,6 +22,7 @@ const EditAccount = ({
                 onClick={() => setVisible(true)}
                 disabled={disabled}
                 icon={icon}
+                style={{borderRadius: '8px'}}
             >
                 Chỉnh sửa
             </Button>
@@ -37,16 +38,16 @@ const EditAccount = ({
             >
                 <Row>
                     {showChangePassword && <>
-                        <Col md={24}>
+                        <Col span={24}>
                             <ChangePassword />
                         </Col>
                         <Divider />
                     </>}
-                    <Col md={24}>
+                    <Col span={24}>
                         <ChangeTime />
                     </Col>
                     <Divider />
-                    <Col md={24}>
+                    <Col span={24}>
                         <ChangeState />
                     </Col>
                 </Row>

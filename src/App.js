@@ -11,6 +11,7 @@ import Analysis from './layouts/analysis/Analysis';
 import ViewPopulation from './layouts/view/ViewPopulation';
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';
+import Declare from './layouts/declare/Declare';
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
           </Route>
           <Route exact path="/register" element={<PrivateRoute />}>
             <Route exact path='/register' element={<Register/>}/>
+          </Route>
+          <Route exact path="/declare" element={<PrivateRoute />}>
+            <Route exact path='/declare' element={<Declare/>}/>
           </Route>
           
           <Route path="/home" element={<Hompage />} >

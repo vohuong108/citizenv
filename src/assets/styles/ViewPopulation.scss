@@ -16,6 +16,21 @@
         box-shadow: rgba(0, 0, 0, 0.043) 0px 3px 20px 0px;
 
         @include Responsive(xs) {padding: 14px;}
+        @include Responsive(sm) {padding: 14px;}
         @include Responsive(xl) {padding: 20px;}
+
+        .view-population-table {
+            @include Responsive(xs) { display: none;}
+            @include Responsive(sm) { display: none;}
+            @include Responsive(md) { display: block;}
+        }
+
+
+        .view-population-collapse {
+            .ant-collapse-header {
+                font-weight: 500;
+            }
+            @include Responsive(md) { display: none;}
+        }
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
 
-export default function Form() {
+export default function Declare () {
 
     const { register : registerInfo, handleSubmit: handleSubmitInfo, formState: { errors } } = useForm();
 
@@ -13,7 +13,7 @@ export default function Form() {
         <div>
             <form action="" onSubmit={handleSubmitInfo(onHandleSubmit)}>
                 <div className='form-container'>
-                    <h1 className='title'>Thông Tin Công Dân</h1>
+                    <h1 className='title'>Khai Báo Thông Tin Công Dân</h1>
                         <span className='input'>
                         <label htmlFor="name">Họ và tên<span className='text-danger'>(*)</span></label>
                         <input id='name' type="text" {...registerInfo("Name")}/>

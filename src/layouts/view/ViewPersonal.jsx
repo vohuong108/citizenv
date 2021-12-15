@@ -29,10 +29,11 @@ const ViewPersonal = () => {
     return (
         <>
             <Button
+                style={{borderRadius: '8px'}}
                 icon={<EyeOutlined style={{color: 'green'}}/>}
                 onClick={() => personalInfo()}
             >
-                Xem thông tin
+                Xem 
             </Button>
             <Modal 
                 title="Thông Tin Cá Nhân" 

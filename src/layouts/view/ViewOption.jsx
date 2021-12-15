@@ -57,7 +57,7 @@ const ViewOption = ({ filterData }) => {
             {(level && level !== 'country') && 
             <Row className="view-option-row option-row" gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]}>
                 {(level === 'province' || level === 'district' || level === 'ward' || level === 'hamlet') &&
-                <Col xs={24} sm={12} className="opt-col">
+                <Col xs={24} md={12} className="opt-col">
                     <label className="opt-label">Tỉnh/Thành</label>
                     <Select 
                         mode='multiple'
@@ -70,7 +70,7 @@ const ViewOption = ({ filterData }) => {
                 </Col>}
                 
                 {(level === 'district' || level === 'ward' || level === 'hamlet') &&
-                <Col xs={24} sm={12} className="opt-col">
+                <Col xs={24} md={12} className="opt-col">
                     <label className="opt-label">Huyện/Quận</label>
                     <Select 
                         mode='multiple'
@@ -83,7 +83,7 @@ const ViewOption = ({ filterData }) => {
                 </Col>}
                 
                 {(level === 'ward' || level === 'hamlet') &&
-                <Col xs={24} sm={12} className="opt-col">
+                <Col xs={24} md={12} className="opt-col">
                     <label className="opt-label">Xã/Phường</label>
                     <Select 
                         mode='multiple'
@@ -96,7 +96,7 @@ const ViewOption = ({ filterData }) => {
                 </Col>}
                 
                 {(level === 'hamlet') && 
-                <Col xs={24} sm={12} className="opt-col">
+                <Col xs={24} md={12} className="opt-col">
                     <label className="opt-label">Thôn/Bản</label>
                     <Select 
                         mode='multiple'

@@ -1,0 +1,106 @@
+.user-avatar {
+    position: relative;
+
+    .avt-wrap__pop {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        padding-top: 5px;
+        
+        .avt-pop {
+            min-height: 90px;
+            min-width: 220px;
+            border: 1px solid #dcdacb;
+            border-radius: 3px;
+            background-color: #fff;
+
+            .account-info {
+                display: flex;
+                padding: 16px;
+                border-bottom: 1px solid #dcdacb;
+                text-align: left;
+    
+                .avt-user {
+                    flex: 0 0 auto;
+                    margin: 0;
+                }
+
+                .account-detail {
+                    width: 100%;
+                    margin-left: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+        
+                    p {
+                        margin-bottom: .4em;
+                        font-family: sf pro display,-apple-system,BlinkMacSystemFont,Roboto,segoe ui,Helvetica,Arial,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol;
+        
+                        &:nth-child(1) {
+                            font-weight: 700;
+                            line-height: 1.2;
+                            letter-spacing: -.02rem;
+                            font-size: 1rem;
+                            color: #0f7c90;
+                        }
+        
+                        &:hover {
+                            color: rgb(15, 124, 144);
+                        }
+        
+                        &:nth-child(2) {
+                            color: #6a6f73;
+                            font-weight: 400;
+                            line-height: 1.4;
+                            font-size: 0.75rem;
+                        }
+                    }
+                }
+            }
+
+            .list-menu {
+                list-style-type: none;
+                padding: 0 1rem 1rem 1rem;
+                margin: 0;
+                text-align: left;
+                // color: #1c1d1f;
+
+                border-bottom: 1px solid #dcdacb;
+                
+                li {
+                    height: 2.225rem;
+
+                    &:hover {
+                        color:rgb(15, 124, 144);
+                    }
+
+                    a {
+                        font-size: 1rem;
+                        font-weight: 500;
+                        line-height: 1.225rem;
+                        color: #1c1d1f;
+                        
+                        &:hover {
+                            color:rgb(15, 124, 144);
+                        }
+                    }
+
+                }
+
+                &:last-child {
+                    border: none;
+                }
+
+                
+            }
+
+        }
+
+    }
+
+    .pop-act {
+        display: block;
+    }
+
+}

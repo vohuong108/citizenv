@@ -1,3 +1,257 @@
 .header {
-    height: 80px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    height: 72px;
+    
+    .header-container {
+        padding: 0 1.6rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: linear-gradient(90deg,#1c3faa,#677ebd);
+        height: 72px;
+    }
+    
+    .header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .logo-wrap {
+            // padding-right: 1.2rem;
+
+            a {
+                display: block;
+
+                .logo-img {
+                    width: 72px;
+                    display: flex;
+                    align-items: center;
+                    margin-left: auto;
+                    margin-right: auto;
+                    padding: 8px;
+                }
+            }
+        }
+
+        .btn-responsive {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            border: none;
+
+            .anticon {
+                font-size: 1.5rem;
+                color: #fff;
+            }
+        }
+    }
+    
+    .header-left {
+        display: flex;
+        align-items: center;
+
+        .btn-menu {
+            @include Responsive(lg) {
+                display: none;
+            }
+        }
+
+        .left-logo {
+            display:none;
+            @include Responsive(lg) {
+                display: block;
+            }
+        }
+    }
+
+    .header-middle {
+        flex-basis: 50%;
+
+        .middle-logo {
+            @include Responsive(lg) {
+                display: none;
+            }
+        }
+    }
+    
+    .header-right {
+        display: flex;
+
+        .header-right__user {
+            display: none;
+
+            .declare {
+                color: #fff;
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+
+                &:hover {
+                    transform: translateY(-2px);
+                }
+            }
+
+            @include Responsive(lg) {
+                display: flex;
+            }
+        }
+        
+        .header-right__btn {
+            display: none;
+            
+            @include Responsive(lg) {
+                display: flex;
+                align-items: center;
+            }
+
+            .header-btn {
+                margin-left: 1.2rem !important;
+            }
+        }
+    }
+    
+    
+}
+
+.menu-drawer {
+
+    .ant-drawer-wrapper-body {
+        background-color: rgb(28, 63, 170);
+    }
+
+    .menu-drawer-wrap {
+        
+        .user-info {
+            padding: 1rem;
+            background-color: #f7f9fa;
+            border-radius: 8px;
+            box-shadow: rgba(0, 0, 0, 0.043) 0px 3px;
+            
+            a {
+                display: flex;
+                align-items: center;
+
+                .avt-user {
+                    flex-basis: 64px;
+                }
+
+                .account-detail {
+                    width: 160px;
+                    flex: 1;
+                    padding-left: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+        
+                    p {
+                        margin-bottom: .4em;
+                        font-family: sf pro display,-apple-system,BlinkMacSystemFont,Roboto,segoe ui,Helvetica,Arial,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol;
+                        max-width: 100%;
+
+                        &:nth-child(1) {
+                            font-weight: 700;
+                            line-height: 1.2;
+                            letter-spacing: -.02rem;
+                            font-size: 1rem;
+                            color: rgb(15, 124, 144);
+                        }
+        
+                        &:nth-child(2) {
+                            color: #6a6f73;
+                            font-weight: 400;
+                            line-height: 1.4;
+                            font-size: 0.75rem;
+                        }
+                    }
+                }
+            }
+        }
+
+        .menu-user-yet-login {
+            ul {
+                list-style-type: none;
+                padding: 1rem;
+                margin-bottom: 0;
+                font-size: 1rem;
+                font-weight: 500;
+
+                li {
+                    a {
+                        color: #5624d0;
+                    }
+                }
+            }
+        }
+
+        .menu-drawer-divider {
+            margin: 0;
+        }
+
+        .menu-features {
+            ul {
+                list-style-type: none;
+                padding: 1rem;
+                margin-bottom: 0;
+                font-size: 1rem;
+
+                li {
+                    color:#fff;
+
+                    a {
+                        color:#fff;
+                    }
+
+                    &:last-child {
+                        font-weight: 500;
+                    }
+
+                }
+            }
+        }
+
+        .option-menu {
+            border: none;
+            background-color: transparent;
+
+            li {
+                display: flex;
+                align-items: center;
+                color: #fff;
+
+                a {
+                    color:#fff;
+                    font-size: 1rem;
+                }
+            }
+
+            .ant-menu-item-selected {
+                background-color: transparent;
+                
+                a {
+                    font-weight: 600;
+                }
+            }
+        }
+        
+
+    }
+
+    .btn-close {
+        margin-top: 40px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: center;
+        font-size: 1rem;
+        align-items: center;
+        border-radius: 8px;
+        color: #fff;
+        border: none;
+        background-color: #f50;
+        box-shadow: rgba(0, 0, 0, 0.043) 0px 3px;
+    }
 }

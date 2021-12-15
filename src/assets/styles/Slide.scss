@@ -1,5 +1,7 @@
 .slide-left {
     @include Responsive(xs) { display: none; }
+    @include Responsive(sm) { display: none; }
+    @include Responsive(lg) { display: block; }
 
     .ant-layout-sider-children {
         overflow-x: hidden;
