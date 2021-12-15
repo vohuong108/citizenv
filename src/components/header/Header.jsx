@@ -63,7 +63,7 @@ const Header = () => {
                                 </Link>
                             </div>
                             : <div className="header-right__user">
-                                <Link className="declare" to="/declare">
+                                <Link className="declare-btn" to="/declare">
                                     Khai Báo Thông Tin
                                 </Link>
                                 <UserAvatar />

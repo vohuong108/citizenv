@@ -8,7 +8,7 @@ const Register = () => {
     const { control, register, handleSubmit, setValue, formState: { errors }, setError } = useForm();
     
     let user = {
-        userRole: 'B1',
+        userRole: 'A1',
         username: "1"
     }
     const onSubmit = async (data) => {
@@ -141,9 +141,9 @@ const SelectLocation = ({ accId, setValue, control, userRole }) => {
                             setValue("username", value);
                         }}
                         onSearch={onSearch}
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
+                        filterOption={(input, option) => {
+                            return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }}
                     >
                         {data?.map((obj, ind) => (
                             <Select.Option key={ind} value={obj.id}>{obj.name}</Select.Option>

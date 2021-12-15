@@ -1,0 +1,150 @@
+.declare {
+    background-color: #f1f5f8;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    // height: calc(100vh - 72px);
+    // overflow-y: auto;
+
+    form {
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: rgba(0, 0, 0, 0.043) 0px 3px;
+
+        #personalId::-webkit-outer-spin-button,
+        #personalId::-webkit-inner-spin-button,
+        #phone::-webkit-outer-spin-button,
+        #phone::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .text-danger,.err-msg {
+            color: red;
+        }
+
+        label {
+            color: rgb(45, 55, 72);
+            font-size: 1rem;
+            font-family: Roboto;
+        }
+
+        .form-row-demographic {
+            .form-item-demographic {
+                display: flex;
+                align-items: center;
+
+                label {
+                    display: block;
+                    width: 130px;
+                    text-align: left;
+                }
+    
+                .input-left {
+                    width: 100%;
+                    border-radius: .375rem;
+                    border-width: 1px;
+                    border-color: rgb(241, 245, 248);
+                    border-style: solid;
+                    padding: .5rem .75rem;
+                    outline: none;
+                    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                    font-size: 100%;
+                    flex: 1;
+    
+                    &:focus {
+                        outline: 2px solid transparent;
+                        outline-offset: 2px;
+                        box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(59, 130, 246, 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                    }
+                }
+
+                .input-right {
+                    width: 166px;
+                }
+
+                input#phone {
+                    border-radius: .375rem;
+                    border-width: 1px;
+                    border-color: rgb(241, 245, 248);
+                    border-style: solid;
+                    padding: .5rem .75rem;
+                    outline: none;
+                    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                    font-size: 100%;
+    
+                    &:focus {
+                        outline: 2px solid transparent;
+                        outline-offset: 2px;
+                        box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(59, 130, 246, 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                    }
+                }
+    
+            }
+
+            .err-msg {
+                margin-left: 130px;
+                text-align: left;
+            }
+        }
+
+        .form-row-address-1 {
+            .location-1 {
+                width: 100%;
+            }
+        }
+
+        .form-row-address-2 {
+            margin-top: 40px;
+            .location-2 {
+                width: 100%;
+            }
+        }
+
+        .select-declare-type {
+            text-align: left;
+            label {
+                font-size: 1rem;
+                font-weight: 600;
+                margin-right: 10px;
+            }
+        }
+
+        .form-item-address-only {
+            margin-top: 30px;
+        }
+
+
+        input[type="submit"] {
+            margin-top: 5rem;
+            background-color: rgb(28, 63, 170);
+            width: 10rem;
+            margin-right: auto;
+            border-color: rgb(28, 63, 170);
+            color: #fff;
+            border-radius: 0.375rem;
+            border: 1px solid rgb(28, 63, 170);
+            display: inline-flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            padding: .5rem .75rem;
+            font-weight: 500;
+
+            &:hover {
+                background-color: rgba(28, 63, 170, .9);
+                border-color: rgba(28, 63, 170, .9);
+            }
+
+            &:focus {
+                outline: 2px solid transparent;
+                outline-offset: 2px;
+                box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(59, 130, 246, 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+            }
+
+        }
+
+    }
+}

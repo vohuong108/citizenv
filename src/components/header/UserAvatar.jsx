@@ -51,7 +51,10 @@ const UserAvatar = ({ history }) => {
                         </a>
                         <Menu className="list-menu" >
                             <Menu.Item className="menu_item" key="account" icon={<UserOutlined width="20px"/>}>
-                                <Link to={`home/account`}>Hồ sơ của tôi </Link>  
+                                <Link to={`#`}>Hồ sơ của tôi </Link>  
+                            </Menu.Item>
+                            <Menu.Item className="menu_item" key="dashbroad" icon={<UserOutlined width="20px"/>}>
+                                <Link to={`home/account`}>Trang quản lý </Link>  
                             </Menu.Item>
                             <Menu.Item className="menu_item" key="population" icon={<QuestionCircleOutlined width="20px"/>}>
                                 <Link to={'#'}>Trợ giúp</Link>  

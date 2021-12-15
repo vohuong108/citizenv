@@ -72,7 +72,7 @@
                     height: 2.225rem;
 
                     &:hover {
-                        color:rgb(15, 124, 144);
+                        color:rgb(15, 124, 144) !important;
                     }
 
                     a {
@@ -86,6 +86,11 @@
                         }
                     }
 
+                }
+
+                li.ant-menu-item-selected {
+                    background-color: transparent;
+                    color: #000;
                 }
 
                 &:last-child {
