@@ -31,7 +31,7 @@ function App() {
             <Route path={`population`} element={<ViewPopulation />} />
           </Route>
         </Routes>
-        {/* <div class="Footer"><Footer/></div> */}
+        <div class="Footer"><Footer/></div>
       </div>
     </BrowserRouter>
   );

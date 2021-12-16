@@ -1,21 +1,51 @@
 .Container {
+  justify-content: space-between;
   width: 100%;
-  height: 150px;
   margin-bottom: 10px;
 
-  // padding: 5px;
   .Footer {
     width: 100%;
-    height: 100%;
+    height: fit-content;
+    background-color: rgb(73, 205, 218);
     display: flex;
-    background-color: rgb(61, 50, 50);
-    justify-content: flex-start;
-    text-align: left;
-    padding-left: 10px;
-    padding-top: 10px;
-    // padding: 10px;
+    justify-content: space-between;
+    color: rgb(236, 234, 205);
+    // line-height: 5px;
+    font-size: 13px;
+    padding: 10px;
+
+    @media (max-width: 1025px) {
+      font-size: 10px;
+    }
+    @media (max-width: 770px) {
+      width: 100vw;
+      font-size: 10px;
+      flex-direction: column;
+    }
     .info {
-      color: rgb(236, 234, 205);
+      h5 {
+        margin-bottom: 20px;
+        @media (max-width: 1025px) {
+          font-size: 15px;
+        }
+      }
+      @media (max-width: 770px) {
+        p {
+          line-break: strict;
+        }
+      }
+    }
+    .contact {
+      width: 45%;
+      h6 {
+        margin-bottom: 20px;
+      }
+      span {
+        padding-left: 10px;
+      }
+      @media (max-width: 770px) {
+        width: 100%;
+      }
     }
   }
 }
