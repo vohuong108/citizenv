@@ -10,7 +10,8 @@ const EditAccount = ({
     className='edit-btn-save btn-add-content', 
     shape="round", 
     disabled = false,
-    icon
+    icon,
+    isMultiple
 }) => {
     const [visible, setVisible] = useState(false);
 
@@ -39,16 +40,16 @@ const EditAccount = ({
                 <Row>
                     {showChangePassword && <>
                         <Col span={24}>
-                            <ChangePassword />
+                            <ChangePassword isMultiple={isMultiple}/>
                         </Col>
                         <Divider />
                     </>}
                     <Col span={24}>
-                        <ChangeTime />
+                        <ChangeTime isMultiple={isMultiple}/>
                     </Col>
                     <Divider />
                     <Col span={24}>
-                        <ChangeState />
+                        <ChangeState isMultiple={isMultiple}/>
                     </Col>
                 </Row>
             </Drawer>

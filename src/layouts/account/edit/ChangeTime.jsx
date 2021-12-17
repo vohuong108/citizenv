@@ -7,13 +7,15 @@ const ChangeTime = () => {
     const { control, handleSubmit, formState: { errors }, setValue } = useForm();
 
     const onSubmit = async (data) => {
-        console.log("data change time 1: ", data.release_date);
-        console.log("data change time 2: ", data.release_date.format());
-        console.log("data change time 3: ", moment.utc(data.release_date.format()).local());
+        console.log("submit change time data:  ", data);
+
+        // console.log("data change time 1: ", data.release_date);
+        // console.log("data change time 2: ", data.release_date.format());
+        // console.log("data change time 3: ", moment.utc(data.release_date.format()).local());
     }
 
     useEffect(() => {
-        setValue("release_date", moment.utc("2021-12-10T07:55:41Z").local())
+        setValue("startTime", moment.utc("2021-12-10T07:55:41Z").local())
     }, [])
 
     return (
@@ -27,7 +29,7 @@ const ChangeTime = () => {
                         <div className="form-item">
                             <Tag color="cyan" className="start-label">Ngày bắt đầu </Tag>
                             <Controller
-                                name="release_date"
+                                name="startTime"
                                 control={control}
                                 rules={{ required: true }}
                                 render={({ field }) => 
@@ -39,12 +41,12 @@ const ChangeTime = () => {
                                     />
                                 }
                             />
-                            {errors.release_date?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày bắt đầu</p>}
+                            {errors.startTime?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày bắt đầu</p>}
                         </div>
                         <div className="form-item">
                             <Tag color="#f50" className="end-label">Ngày kết thúc </Tag>
                             <Controller
-                                name="finish_date"
+                                name="endTime"
                                 control={control}
                                 rules={{ required: true }}
                                 render={({ field }) => 
@@ -56,7 +58,7 @@ const ChangeTime = () => {
                                     />
                                 }
                             />
-                            {errors.finish_date?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày kết thúc</p>}
+                            {errors.endTime?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày kết thúc</p>}
                         </div>
 
                         <input type="submit" value="Lưu thay đổi" onClick={() => console.log("click")}/>

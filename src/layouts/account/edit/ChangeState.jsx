@@ -12,7 +12,7 @@ const ChangeState = () => {
     }
 
     useEffect(() => {
-        setValue("state", "active");
+        setValue("state", "Active");
     }, [])
 
     return (
@@ -34,8 +34,8 @@ const ChangeState = () => {
                                     onChange={(value) => field.onChange(value)}
                                     value={field.value}
                                 >
-                                    <Select.Option key={1} value={'active'}>Active</Select.Option>
-                                    <Select.Option key={2} value={'inactive'}>InActive</Select.Option>
+                                    <Select.Option key={1} value={'Active'}>Active</Select.Option>
+                                    <Select.Option key={2} value={'InActive'}>InActive</Select.Option>
                                 </Select>
                                 }
                             />

@@ -5,18 +5,18 @@ import ViewPersonal from './ViewPersonal';
 import { CaretRightOutlined } from '@ant-design/icons';
 
 const data = [
-    {name: 'Võ Văn Hướng', personalId: '187925748', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020302", career: "Sinh Viên"},
-    {name: 'Võ Văn Hậu', personalId: '187925747', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020301", career: "Sinh Viên", },
-    {name: 'Võ Văn Hướng', personalId: '187925746', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020300", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925745', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020299", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925744', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020298", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925743', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020297", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925742', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020296", career: "Sinh Viên", },
-    {name: 'Võ Văn Hướng', personalId: '187925741', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020295", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925740', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020294", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925739', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020293", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925738', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020292", career: "Sinh Viên"},
-    {name: 'Võ Văn Hướng', personalId: '187925737', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020291", career: "Sinh Viên"}
+    {name: 'Võ Văn Hướng', personalId: '187925748', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020302", religion: "Không"},
+    {name: 'Võ Văn Hậu', personalId: '187925747', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020301", religion: "Không", },
+    {name: 'Võ Văn Hướng', personalId: '187925746', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020300", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925745', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020299", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925744', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020298", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925743', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020297", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925742', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020296", religion: "Không", },
+    {name: 'Võ Văn Hướng', personalId: '187925741', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020295", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925740', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020294", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925739', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020293", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925738', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020292", religion: "Không"},
+    {name: 'Võ Văn Hướng', personalId: '187925737', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020291", religion: "Không"}
 ]
 
 
@@ -53,9 +53,9 @@ const ViewPopulation = () => {
             align: 'center',
             sorter: (a, b) => parseInt(a.addressCode) - parseInt(b.addressCode),
         }, {
-            title: 'Nghề nghiệp',
-            dataIndex: "career",
-            className: "career",
+            title: 'Tôn giáo',
+            dataIndex: "religion",
+            className: "religion",
             align: 'center',
         }, {
             title: 'Hành động',
@@ -93,7 +93,7 @@ const ViewPopulation = () => {
                             <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Giới Tính: ${item.gender}`}</p>
                             <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Ngày Sinh: ${item.dateOfBirth}`}</p>
                             <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Mã Thường Trú: ${item.addressCode}`}</p>
-                            <p style={{fontWeight: '500', marginBottom: '16px'}}>{`Nghề Nghiệp: ${item.career}`}</p>
+                            <p style={{fontWeight: '500', marginBottom: '16px'}}>{`Tôn giáo: ${item.religion}`}</p>
                             <ViewPersonal />
                         </Collapse.Panel>
                     )}

@@ -139,6 +139,7 @@ const Account = () => {
                         shape="default"
                         className="edit-accounts"
                         disabled={selectedRowKeys.length <= 1}
+                        isMultiple={true}
                     />
                 </Col>
                 <Col >

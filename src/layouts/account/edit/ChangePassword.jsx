@@ -1,7 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { removeAscent } from '../../../utils/validate';
 
-const ChangePassword = ({ type }) => {
+
+function isNameValid (string) {
+    var re = /^[A-Za-z0-9 ]+$/g // regex here
+    return re.test(removeAscent(string))
+}
+
+const ChangePassword = ({ isMultiple = false, data }) => {
     const { register, handleSubmit, setValue, formState: { errors }, setError } = useForm();
 
     const onSubmit = async (data) => {
@@ -24,18 +31,25 @@ const ChangePassword = ({ type }) => {
                 </div>
                 <div className="change-pass-body">
                     <form id="form-change-pass" onSubmit={handleSubmit(onSubmit)} >
+                        {!isMultiple && 
+                        <>
+                            <div className="form-item">
+                                <label>Tên đơn vị</label>
+                                <input 
+                                    style={{textTransform: 'capitalize'}}
+                                    type="text" 
+                                    {...register("name", {
+                                        required: "Vui lòng nhập tên đơn vị.",
+                                        validate: (value) => isNameValid(value) ? true : "Vui lòng nhập đúng định dạng"
+                                    })}
+                                />
+                            </div>
+                            {errors.name && <p className="err-msg">{errors.name.message}</p>}
+                        </>}
                         <div className="form-item">
                             <label>Tên đăng nhập</label>
                             <input type="text" disabled {...register("username")}/>
                         </div>
-                        {type === "personal" && 
-                        <>
-                            <div className="form-item">
-                                <label>Mật khẩu cũ</label>
-                                <input name="oldPass" type="password" {...register("oldPass", { required: "Vui lòng nhập mật khẩu." })}/>
-                            </div>
-                            {errors.oldPass && <p className="err-msg">{errors.oldPass.message}</p>}
-                        </>}
                         <div className="form-item">
                             <label>Mật khẩu mới</label>
                             <input name="newPass" type="password" {...register("newPass", { required: "Vui lòng nhập mật khẩu mới." })}/>

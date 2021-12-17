@@ -3,13 +3,27 @@
     padding-bottom: 80px;
     background-color: #f1f5f8;
 
+    @include Responsive(xs) {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
     .register-container {
-        max-width: 960px;
         border-radius: 5px;
         background-color: #ffffff;
         box-shadow: 0 0 12px 0 #b3afaf;
         margin-left: auto;
         margin-right: auto;
+
+        @include Responsive(sm) {
+            max-width: 500px;
+        }
+        @include Responsive(md) {
+            max-width: 700px;
+        }
+        @include Responsive(lg) {
+            max-width: 800px;
+        }
     }
 
     .register-header {
@@ -80,6 +94,14 @@
                 &:disabled {
                     background-color: rgba(247,250,252, 1);
                 }
+            }
+
+            .start-label,.end-label {
+                width: 90px;
+
+                @include Responsive (xs) { margin-bottom: 8px;}
+                @include Responsive (sm) { margin-bottom: 8px;}
+                @include Responsive (md) { margin-bottom: 0px;}
             }
 
         }

@@ -1,0 +1,20 @@
+.view-action {
+    .ant-popover-inner {
+        border-radius: 6px;
+    }
+
+    .list-action-item {
+        cursor: pointer;
+        border-bottom: none !important;
+        padding: 8px 12px !important;
+        border-radius: 6px;
+    
+        &:hover {
+            background-color: rgba(237,242,247, 1);
+        }
+
+        .btn-export-csv{
+            color: #000;
+        }
+    }
+}

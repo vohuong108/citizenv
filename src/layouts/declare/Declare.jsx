@@ -1,12 +1,24 @@
-import { Divider, Row, Col, Select, DatePicker, Switch } from 'antd';
+import { Divider, Row, Col, Select, DatePicker, Switch, Button } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from "react-hook-form";
 import Location from '../../components/location/Location';
 import { CaretRightOutlined } from '@ant-design/icons';
-
+import moment from 'moment';
 import locale from 'antd/es/date-picker/locale/vi_VN';
+import { DownloadOutlined  } from '@ant-design/icons';
+import { removeAscent } from "../../utils/validate";
 
-export default function Declare () {
+function isFullnameValid (string) {
+    var re = /^[a-zA-Z]{2,}(?: [a-zA-Z]+){1,}$/g // regex here
+    return re.test(removeAscent(string))
+}
+
+function isReligionValid (string) {
+    var re = /^[A-Za-z ]+$/g // regex here
+    return re.test(removeAscent(string))
+}
+
+export default function Declare ({type = "declare"}) {
 
     const { control, register: registerInfo, handleSubmit: handleSubmitInfo, setValue, formState: { errors }, setError } = useForm();
 
@@ -25,14 +37,24 @@ export default function Declare () {
                         align='middle'
                         gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]}
                     >
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label htmlFor="fullname">Họ và tên <span className="text-danger">*</span></label>
-                                <input className="input-left" id="fullname" type="text" {...registerInfo("fullname", { required: "Vui lòng nhập họ tên." })} />
+                                <label className="label-left" htmlFor="fullname">Họ và tên <span className="text-danger">*</span></label>
+                                <input 
+                                    className="input-left" 
+                                    style={{textTransform: "capitalize"}}
+                                    id="fullname" 
+                                    type="text" 
+                                    autoComplete="off"
+                                    {...registerInfo("fullname", { 
+                                        required: "Vui lòng nhập họ tên.", 
+                                        validate: (value) => isFullnameValid(value) ? '' : "Vui lòng nhập đúng định dạng"
+                                    })} 
+                                />
                             </div>
-                            {errors.fullname && <p className="err-msg">{errors.fullname.message}</p>}
+                            {errors?.fullname && <p className="err-msg">{errors.fullname.message}</p>}
                         </Col>
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
                                 <label htmlFor="dateOfBirth">Ngày sinh <span className="text-danger">*</span></label>
                                 <Controller 
@@ -46,6 +68,7 @@ export default function Declare () {
                                             className="input-right" 
                                             format="DD/MM/YYYY" 
                                             placeholder="ngày/tháng/năm"
+                                            disabledDate={(current) => current && current > moment().endOf('day')}
                                             onChange={(value) => {
                                                 field.onChange(value); 
                                             }}
@@ -55,30 +78,60 @@ export default function Declare () {
                             </div>
                             {errors.dateOfBirth && <p className="err-msg">{errors.dateOfBirth.message}</p>}
                         </Col>
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label htmlFor="personalId">Số CCCD/CMND</label>
-                                <input className="input-left" id="personalId" type="number" {...registerInfo("personalId")}/>
+                                <label className="label-left" htmlFor="personalId">Số CCCD/CMND</label>
+                                <input 
+                                className="input-left" 
+                                id="personalId" 
+                                type="number" 
+                                {...registerInfo("personalId", {
+                                    pattern: {
+                                        value: /(^[0-9]{9,9}$)|(^[0-9]{12,12}$)/g,
+                                        message: "Vui lòng nhập đúng định dạng."
+                                    }
+                                }
+                                )}
+                                />
                             </div>
+                            {errors.personalId && <p className="err-msg">{errors.personalId.message}</p>}
                         </Col>
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
                                 <label htmlFor="phone" >Số điện thoại</label>
-                                <input className="input-right" id="phone" type="number" {...registerInfo("phone")} />
+                                <input 
+                                className="input-right" 
+                                id="phone" 
+                                type="number" 
+                                {...registerInfo("phone", {
+                                    pattern: {
+                                        value: /^[0-9]{10,10}$/g,
+                                        message: "Vui lòng nhập đúng định dạng."
+                                    }
+                                })} 
+                                />
                             </div>
                             {errors.phone && <p className="err-msg">{errors.phone.message}</p>}
                         </Col>
 
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label htmlFor="religion">Tôn giáo <span className="text-danger">*</span></label>
-                                <input className="input-left" id="religion" type="text" {...registerInfo("religion", { required: "Vui lòng nhập tôn giáo." })} />
+                                <label className="label-left" htmlFor="religion">Tôn giáo <span className="text-danger">*</span></label>
+                                <input 
+                                    className="input-left" 
+                                    id="religion" 
+                                    type="text" 
+                                    {...registerInfo("religion", { 
+                                        required: "Vui lòng nhập tôn giáo.",
+                                        validate: (value) => isReligionValid(value) ? '' : "Vui lòng nhập đúng định dạng"
+                                    })} 
+                                />
                             </div>
                             {errors.religion && <p className="err-msg">{errors.religion.message}</p>}
                         </Col>
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label htmlFor="education">Trình độ văn hóa<span className="text-danger">*</span></label>
+                                <label htmlFor="education">Trình độ văn hóa <span className="text-danger">*</span></label>
                                 <Controller 
                                     name="education"
                                     defaultValue="12/12"
@@ -107,13 +160,13 @@ export default function Declare () {
                             </div>
                             {errors.education && <p className="err-msg">{errors.education.message}</p>}
                         </Col>
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label htmlFor="job">Nghề Nghiệp</label>
-                                <input className="input-left" id="job" type="text"{...registerInfo("job")} />
+                                <label className="label-left" htmlFor="career">Nghề Nghiệp</label>
+                                <input className="input-left" id="career" type="text"{...registerInfo("career")} />
                             </div>
                         </Col>
-                        <Col sm={12}>
+                        <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
                                 <label htmlFor="gender">Giới tính <span className="text-danger">*</span></label>
                                 <Controller 
@@ -142,7 +195,14 @@ export default function Declare () {
                     </Row>
                     <Divider />
                     <AddressOption control={control} errors={errors}/>
-                    <input value ="Kê Khai Thông Tin" type="submit" />
+                    <div className="form-btn-wrap">
+                        <input value={type === "EDIT" ? "Cập Nhật" : "Kê Khai Thông Tin"} type="submit" />
+                        {type !== "EDIT" && 
+                            <Button className="btn-download-form" icon={<DownloadOutlined  />}>
+                                <a href="../../assets/file/form.docx" download> Mẫu Khai Báo</a>
+                            </Button>
+                        }
+                    </div>
                 </div>
             </form>
         </div>
@@ -178,8 +238,8 @@ const AddressOption = ({ control, errors }) => {
         <>
             <div className="form-row-address-1">
                 <h3>Quê Quán <span className="text-danger">*</span></h3>
-                <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, 0]}>
-                    <Col span={6}>
+                <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]}>
+                    <Col className="col-address-select" xs={24} sm={12} md={6}>
                         <label>Thôn/Bản</label>
                         <Location
                             className="location-1" 
@@ -192,7 +252,7 @@ const AddressOption = ({ control, errors }) => {
                             placeholder="Thôn/Bản"
                         />
                     </Col>
-                    <Col span={6}>
+                    <Col className="col-address-select" xs={24} sm={12} md={6}>
                         <label>Xã/Phường</label>
                         <Location
                             className="location-1" 
@@ -205,7 +265,7 @@ const AddressOption = ({ control, errors }) => {
                             placeholder="Xã/Phường"
                         />
                     </Col>
-                    <Col span={6}>
+                    <Col className="col-address-select" xs={24} sm={12} md={6}>
                         <label>Huyện/Quận</label>
                         <Location
                             className="location-1" 
@@ -218,7 +278,7 @@ const AddressOption = ({ control, errors }) => {
                             placeholder="Huyện/Quận"
                         />
                     </Col>
-                    <Col span={6}>
+                    <Col className="col-address-select" xs={24} sm={12} md={6}>
                         <label>Tỉnh/Thành</label>
                         <Location
                             className="location-1" 
@@ -262,8 +322,8 @@ const AddressOption = ({ control, errors }) => {
                 </div>
                 : <div className="form-row-address-2">
                     <h3>Địa Chỉ Thường Trú <span className="text-danger">*</span></h3>
-                    <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, 0]}>
-                        <Col span={6}>
+                    <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]} >
+                        <Col className="col-address-select" xs={24} sm={12} md={6}>
                             <label>Thôn/Bản</label>
                             <Location
                                 className="location-2" 
@@ -276,7 +336,7 @@ const AddressOption = ({ control, errors }) => {
                                 placeholder="Thôn/Bản"
                             />
                         </Col>
-                        <Col span={6}>
+                        <Col className="col-address-select" xs={24} sm={12} md={6}>
                             <label>Xã/Phường</label>
                             <Location
                                 className="location-2" 
@@ -289,7 +349,7 @@ const AddressOption = ({ control, errors }) => {
                                 placeholder="Xã/Phường"
                             />
                         </Col>
-                        <Col span={6}>
+                        <Col className="col-address-select" xs={24} sm={12} md={6}>
                             <label>Huyện/Quận</label>
                             <Location
                                 className="location-2" 
@@ -302,7 +362,7 @@ const AddressOption = ({ control, errors }) => {
                                 placeholder="Huyện/Quận"
                             />
                         </Col>
-                        <Col span={6}>
+                        <Col className="col-address-select" xs={24} sm={12} md={6}>
                             <label>Tỉnh/Thành</label>
                             <Location
                                 className="location-2" 

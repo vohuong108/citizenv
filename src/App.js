@@ -28,6 +28,9 @@ function App() {
           <Route exact path="/declare" element={<PrivateRoute />}>
             <Route exact path='/declare' element={<Declare/>}/>
           </Route>
+          <Route exact path="/edit" element={<PrivateRoute />}>
+            <Route exact path='/edit' element={<Declare type="EDIT" />}/>
+          </Route>
           
           <Route path="/home" element={<Hompage />} >
             <Route index element={<Home />} />
