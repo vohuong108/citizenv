@@ -1,19 +1,69 @@
 import React, { useEffect } from 'react';
-import { Select } from 'antd';
+import { Select, message } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
+import { getToken } from '../../../utils/localStorageHandler';
+import { useDispatch } from 'react-redux';
+import { getListAccount } from '../../../features/manager/account/accountAction';
+import userApi from '../../../api/userApi';
 
-
-const ChangeState = () => {
+const ChangeState = ({ isMultiple, data }) => {
     const { control, handleSubmit, setValue } = useForm();
+    const dispatch = useDispatch();
 
-    const onSubmit = async (data) => {
-        console.log("data change state: ", data);
+    const onSubmit = async (formData) => {
+        try {
+            console.log("prop data: ", data);
+            console.log("data change state: ", formData);
 
+            if(!isMultiple) {
+                let response = await userApi.changeAccountState({
+                    access_token: getToken(), 
+                    data: {
+                        username: data.username, 
+                        enable: formData.state === 'Active' ? true : false
+                    }}
+                );
+        
+                console.log("change response: ", response);
+
+                message.success({
+                    content: response,
+                    style: {marginTop: '72px'},
+                    key: "changestate-msg"
+                })
+            } else {
+                let response = await userApi.changeListAccountState({
+                    access_token: getToken(),
+                    usernames: data, 
+                    enable: formData.state,
+                });
+        
+                console.log("mutilple change response: ", response);
+
+                message.success({
+                    content: response,
+                    style: {marginTop: '72px'},
+                    key: "changestate-msg"
+                })
+
+            }
+            await dispatch(getListAccount({access_token: getToken()}));
+    
+            
+        } catch (err) {
+            message.error({
+                content: err.message,
+                style: {marginTop: '72px'},
+                key: "changestate-msg"
+            })
+        }
     }
 
     useEffect(() => {
-        setValue("state", "Active");
-    }, [])
+        if(!isMultiple) {
+            setValue("state", data?.state);
+        }
+    }, [data])
 
     return (
         <div className="change-state">
@@ -28,10 +78,12 @@ const ChangeState = () => {
                             <Controller
                                 name="state"
                                 control={control}
+                                defaultValue="Active"
                                 render={({ field }) => 
                                 <Select 
                                     className="active-select" 
                                     onChange={(value) => field.onChange(value)}
+                                    defaultValue="Active"
                                     value={field.value}
                                 >
                                     <Select.Option key={1} value={'Active'}>Active</Select.Option>

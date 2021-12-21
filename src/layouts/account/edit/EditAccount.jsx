@@ -11,7 +11,8 @@ const EditAccount = ({
     shape="round", 
     disabled = false,
     icon,
-    isMultiple
+    isMultiple,
+    data,
 }) => {
     const [visible, setVisible] = useState(false);
 
@@ -40,16 +41,16 @@ const EditAccount = ({
                 <Row>
                     {showChangePassword && <>
                         <Col span={24}>
-                            <ChangePassword isMultiple={isMultiple}/>
+                            <ChangePassword isMultiple={isMultiple} data={data} />
                         </Col>
                         <Divider />
                     </>}
                     <Col span={24}>
-                        <ChangeTime isMultiple={isMultiple}/>
+                        <ChangeTime isMultiple={isMultiple} data={data} />
                     </Col>
                     <Divider />
                     <Col span={24}>
-                        <ChangeState isMultiple={isMultiple}/>
+                        <ChangeState isMultiple={isMultiple} data={data} />
                     </Col>
                 </Row>
             </Drawer>

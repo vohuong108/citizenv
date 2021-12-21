@@ -13,8 +13,8 @@ const Slide = ({ course }) => {
     const location = useLocation();
     const match = useMatch("/home");
 
-    console.log("home: ", location);
-    console.log("match: ", match?.pathnameBase);
+    // console.log("home: ", location);
+    // console.log("match: ", match?.pathnameBase);
 
     useEffect(() => {
         if(location.pathname === '/home/account') setKeySlide("account")

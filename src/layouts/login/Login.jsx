@@ -3,7 +3,7 @@ import { LockFilled, UserOutlined} from '@ant-design/icons'
 import { Spin, message, Row, Col } from 'antd';
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from 'axios';
+import { useNavigate, useLocation } from "react-router-dom";
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,21 +14,23 @@ import { unwrapResult } from '@reduxjs/toolkit';
 // import image
 import logo from "../../assets/image/logo.png";
  
-const Login = ({ history, location }) => {
+const Login = () => {
     const { register, handleSubmit } = useForm();
     const dispatch = useDispatch();
     const loginLoading = useSelector(state => state.user.loginLoading);
+    let navigate = useNavigate();
+    let location = useLocation();
 
-    const onSubmit = async () => {
+    const onSubmit = async (data) => {
         try {
-            const login_res = await dispatch(login({username: 'admin', password: 'admin'}));
+            const login_res = await dispatch(login({username: data.username, password: data.password}));
             const un_login_res = unwrapResult(login_res);
 
             console.log("response login data: ", un_login_res);
             setToken(un_login_res?.jwt);
             
-            if(location.state) history.push(location.state.from.pathname)
-            else history.push('/dashbroad');
+            if(location?.state) navigate(location.state.from.pathname)
+            else navigate('/dashboard/account');
 
         } catch (err) {
             console.error("error in login: ", err)
@@ -55,7 +57,7 @@ const Login = ({ history, location }) => {
                                             <p>Hỗ trợ công tác điều tra dân số Việt Nam</p>
                                         </div>
                                     </Col>
-                                    <Col xs={24} sm={10}>
+                                    <Col xs={24} sm={11}>
                                         <div className="inner-right">
                                             <h3>Đăng Nhập</h3>
                                             <form onSubmit={handleSubmit(onSubmit)}>

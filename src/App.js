@@ -25,14 +25,14 @@ function App() {
           <Route exact path="/register" element={<PrivateRoute />}>
             <Route exact path='/register' element={<Register/>}/>
           </Route>
-          <Route exact path="/declare" element={<PrivateRoute />}>
+          <Route exact path="/declare" element={<PublicRoute />}>
             <Route exact path='/declare' element={<Declare/>}/>
           </Route>
           <Route exact path="/edit" element={<PrivateRoute />}>
             <Route exact path='/edit' element={<Declare type="EDIT" />}/>
           </Route>
           
-          <Route path="/home" element={<Hompage />} >
+          <Route path="/dashboard" element={<Hompage />} >
             <Route index element={<Home />} />
             <Route path={`account`} element={<Account />} />
             <Route path={`analysis`} element={<Analysis />} />

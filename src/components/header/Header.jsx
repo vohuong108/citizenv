@@ -4,7 +4,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { getToken, removeToken } from '../../utils/localStorageHandler';
 import { Button, Drawer, Avatar, Divider, Menu } from 'antd';
 import { MenuOutlined, } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logOut } from '../../features/user/userSlice';
 import { getUserInfo } from '../../features/user/userAction';
 import UserAvatar from './UserAvatar';
@@ -24,7 +24,7 @@ const Header = () => {
         console.log("token", token);
 
         const getUser = async (token) => {
-            const resultAction = await dispatch(getUserInfo(token))
+            const resultAction = await dispatch(getUserInfo({access_token: token}))
             const result = unwrapResult(resultAction);
 
             console.log("response get user info in header: ", result);
@@ -56,7 +56,7 @@ const Header = () => {
                         </div>
                     </div>
                     <div className="header-right">
-                        {!true 
+                        {!user 
                             ? <div className="header-right__btn">
                                 <Link to="/login">
                                     <Button className="header-btn" type="primary" shape="round">Đăng Nhập</Button>
@@ -82,12 +82,13 @@ const MenuDrawerLeft = ({ history }) => {
     const [visible, setVisible] = useState(false);
     const user = useSelector(state => state.user.userObj);
     const dispatch = useDispatch();
+    let navigate = useNavigate();
 
     const handleLogOut = () => {
         dispatch(logOut());
         removeToken();
         
-        history.push('/')
+        navigate('/login');
         //TODO: RELOAD PAGE
     }
 
@@ -112,7 +113,7 @@ const MenuDrawerLeft = ({ history }) => {
                 headerStyle={{display: 'none'}}
             >
                 <div className="menu-drawer-wrap">
-                    {true 
+                    {user 
                         ? <React.Fragment>
                             <div className="user-info">
                                 <Link to="/" className="account-info">
@@ -140,13 +141,13 @@ const MenuDrawerLeft = ({ history }) => {
                             <div className="menu-drawer-option">
                                 <Menu className="option-menu" onClick={handleClick}>
                                     <Menu.Item className="menu_item" key="account" icon={<AccountIcon width="20px"/>}>
-                                        <Link to={`home/account`}>Quản lý tài khoản</Link>  
+                                        <Link to={`dashboard/account`}>Quản lý tài khoản</Link>  
                                     </Menu.Item>
                                     <Menu.Item className="menu_item" key="analysis" icon={<ChartBar width="20px"/>}>
-                                        <Link to={`home/analysis`}>Số liệu phân tích</Link>  
+                                        <Link to={`dashboard/analysis`}>Số liệu phân tích</Link>  
                                     </Menu.Item>
                                     <Menu.Item className="menu_item" key="population" icon={<PopIcon width="20px"/>}>
-                                        <Link to={`home/population`}>Thông tin dân số</Link>  
+                                        <Link to={`dashboard/population`}>Thông tin dân số</Link>  
                                     </Menu.Item>
                                 </Menu>
                             </div>

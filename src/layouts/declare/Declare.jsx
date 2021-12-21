@@ -199,7 +199,7 @@ export default function Declare ({type = "declare"}) {
                         <input value={type === "EDIT" ? "Cập Nhật" : "Kê Khai Thông Tin"} type="submit" />
                         {type !== "EDIT" && 
                             <Button className="btn-download-form" icon={<DownloadOutlined  />}>
-                                <a href="../../assets/file/form.docx" download> Mẫu Khai Báo</a>
+                                <a href="../../assets/file/ToKhai.docx" download> Mẫu Khai Báo</a>
                             </Button>
                         }
                     </div>
@@ -212,27 +212,31 @@ export default function Declare ({type = "declare"}) {
 const AddressOption = ({ control, errors }) => {
     const [type, setType] = useState("regulary");
 
+    const [addressData, setAddressData] = useState({
+        provinces: [],
+        districts: [],
+        wards: [],
+        hamlets: [],
+    });
+
+    const [selectedLocation, setSelectedLocation] = useState({
+        province: null,
+        district: null,
+        ward: null,
+        hamlet: null,
+    })
     const onSearch = (value) => {}
-    const hamletData = [
-        {id: 1, name: "hà nội"},
-        {id: 2, name: "đà nẵng"},
-        {id: 3, name: "hồ chí minh"},
-    ];
-    const wardData = [
-        {id: 1, name: "hà nội"},
-        {id: 2, name: "đà nẵng"},
-        {id: 3, name: "hồ chí minh"},
-    ];
-    const districtData = [
-        {id: 1, name: "hà nội"},
-        {id: 2, name: "đà nẵng"},
-        {id: 3, name: "hồ chí minh"},
-    ];
+
     const provinceData = [
         {id: 1, name: "hà nội"},
         {id: 2, name: "đà nẵng"},
         {id: 3, name: "hồ chí minh"},
     ];
+
+    useEffect(() => {
+        //TODO get list province in vn
+
+    }, [])
 
     return (
         <>
@@ -248,7 +252,7 @@ const AddressOption = ({ control, errors }) => {
                             control={control}
                             message="Vui lòng chọn thôn/bản"
                             onSearch={onSearch}
-                            data={hamletData}
+                            data={selectedLocation?.hamlet}
                             placeholder="Thôn/Bản"
                         />
                     </Col>
@@ -261,7 +265,7 @@ const AddressOption = ({ control, errors }) => {
                             control={control}
                             message="Vui lòng chọn xã/phường"
                             onSearch={onSearch}
-                            data={wardData}
+                            data={selectedLocation?.ward}
                             placeholder="Xã/Phường"
                         />
                     </Col>
@@ -274,7 +278,7 @@ const AddressOption = ({ control, errors }) => {
                             control={control}
                             message="Vui lòng chọn huyện/quận"
                             onSearch={onSearch}
-                            data={districtData}
+                            data={selectedLocation?.district}
                             placeholder="Huyện/Quận"
                         />
                     </Col>
@@ -287,7 +291,7 @@ const AddressOption = ({ control, errors }) => {
                             control={control}
                             message="Vui lòng chọn tỉnh/thành"
                             onSearch={onSearch}
-                            data={provinceData}
+                            data={selectedLocation?.province}
                             placeholder="Tỉnh/Thành"
                         />
                     </Col>
@@ -313,7 +317,7 @@ const AddressOption = ({ control, errors }) => {
                         control={control}
                         message="Vui lòng chọn thôn/bản của nơi thường trú"
                         onSearch={onSearch}
-                        data={hamletData}
+                        data={selectedLocation?.hamlet}
                         placeholder="Thôn/Bản"
                         style={{width: '120px'}}
                     />
@@ -332,7 +336,7 @@ const AddressOption = ({ control, errors }) => {
                                 control={control}
                                 message="Vui lòng chọn thôn/bản"
                                 onSearch={onSearch}
-                                data={hamletData}
+                                data={selectedLocation?.hamlet}
                                 placeholder="Thôn/Bản"
                             />
                         </Col>
@@ -345,7 +349,7 @@ const AddressOption = ({ control, errors }) => {
                                 control={control}
                                 message="Vui lòng chọn xã/phường"
                                 onSearch={onSearch}
-                                data={wardData}
+                                data={selectedLocation?.ward}
                                 placeholder="Xã/Phường"
                             />
                         </Col>
@@ -358,7 +362,7 @@ const AddressOption = ({ control, errors }) => {
                                 control={control}
                                 message="Vui lòng chọn huyện/quận"
                                 onSearch={onSearch}
-                                data={districtData}
+                                data={selectedLocation?.district}
                                 placeholder="Huyện/Quận"
                             />
                         </Col>
@@ -371,7 +375,7 @@ const AddressOption = ({ control, errors }) => {
                                 control={control}
                                 message="Vui lòng chọn tỉnh/thành"
                                 onSearch={onSearch}
-                                data={provinceData}
+                                data={selectedLocation?.province}
                                 placeholder="Tỉnh/Thành"
                             />
                         </Col>
@@ -386,7 +390,7 @@ const AddressOption = ({ control, errors }) => {
                         control={control}
                         message="Vui lòng chọn thôn/bản của nơi tạm trú"
                         onSearch={onSearch}
-                        data={hamletData}
+                        data={selectedLocation?.hamlet}
                         placeholder="Thôn/Bản"
                         style={{width: '120px'}}
                     />
@@ -395,5 +399,11 @@ const AddressOption = ({ control, errors }) => {
                 </div>
             }
         </>
+    )
+}
+
+const NativeLand = () => {
+    return (
+        <></>
     )
 }

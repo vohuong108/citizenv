@@ -4,10 +4,13 @@ import { Table, Tag, Row, Col, Input, Collapse } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined, CaretRightOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { getToken } from '../../utils/localStorageHandler';
+import { useSelector, useDispatch } from 'react-redux';
+import { getListAccount } from '../../features/manager/account/accountAction';
+import moment from 'moment';
 
 
 //import icon and images
-import  { ReactComponent as SearchIcon } from '../../assets/icons/search-solid.svg';
 import { EditOutlined } from '@ant-design/icons';
 import ExportData from '../../components/export/ExportData';
 
@@ -32,10 +35,13 @@ const Account = () => {
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
     const [filterData, setFilterData] = useState([]);
+    const accountData = useSelector(state => state.account.listAccount);
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.user.userObj);
 
     const onSelectChange = (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        setSelectedRowKeys([...selectedRows]);
+        console.log(`convert: `, selectedRowKeys);
+        setSelectedRowKeys([...selectedRowKeys]);
     };
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -82,29 +88,41 @@ const Account = () => {
             ),
     });
 
-    
+    let handleAccountLevel = () => {
+        if(user?.userRole === "ROLE_A1") {
+            return <>Tỉnh/Thành</>
+        } else if(user?.userRole === "ROLE_A2") {
+            return <>Quận/Huyện</>
+        } else if(user?.userRole === "ROLE_A3") {
+            return <>Xã/Phường</>
+        } else if(user?.userRole === "ROLE_B1") {
+            return <>Thôn/Bản</>
+        }
+    }
 
     const columns = [
         {
             title: 'Tên đơn vị',
-            dataIndex: "name",
-            ...getColumnSearchProps("name")
+            dataIndex: "location",
+            ...getColumnSearchProps("location")
         }, {
             title: 'Mã đơn vị',
             dataIndex: "username",
             ...getColumnSearchProps("username")
         }, {
             title: 'Cấp bậc',
-            dataIndex: "level",
             align: 'center',
+            render: () => handleAccountLevel()
         }, {
             title: 'Bắt đầu khai báo',
-            dataIndex: "startTime",
+            dataIndex: "start",
             align: 'center',
+            render: (text) => text ? moment.utc(text).local().format('DD-MM-YYYY HH:mm:ss') : <>Chưa xác định</>
         }, {
             title: 'Kết thúc khai báo',
-            dataIndex: "endTime",
+            dataIndex: "end",
             align: 'center',
+            render: (text) => text ? moment.utc(text).local().format('DD-MM-YYYY HH:mm:ss') : <>Chưa xác định</>
         }, {
             title: 'Trạng thái',
             dataIndex: "state",
@@ -120,13 +138,23 @@ const Account = () => {
                 },
             ],
             onFilter: (value, record) => record.state.toLowerCase() === value,
-            render: (state) => state === 'Active' ? <Tag color='cyan'>{state}</Tag> : <Tag color='#f50'>{state}</Tag>
+            render: (state) => state?.toLowerCase() === 'active' ? <Tag color='cyan'>{state}</Tag> : <Tag color='#f50'>{state}</Tag>
         }, {
             title: 'Hành động',
             align: 'center',
-            render: (text) => <EditAccount shape="default" icon={<EditOutlined />} />,
+            render: (rowData) => <EditAccount shape="default" icon={<EditOutlined />} data={rowData} />,
         }
     ];
+
+    useEffect(() => {
+        let  getAccountData = async () => {
+            let token = getToken();
+            let response = await dispatch(getListAccount({access_token: token}));
+            console.log("response acc data: ", response);
+        }
+
+        getAccountData();
+    }, [])
 
     return (
         <div className="account">
@@ -140,6 +168,7 @@ const Account = () => {
                         className="edit-accounts"
                         disabled={selectedRowKeys.length <= 1}
                         isMultiple={true}
+                        data={selectedRowKeys}
                     />
                 </Col>
                 <Col >
@@ -153,7 +182,7 @@ const Account = () => {
                 className="account-table"
                 rowSelection={{onChange: onSelectChange}} 
                 columns={columns} 
-                dataSource={data}
+                dataSource={accountData}
                 rowKey="username"
                 onChange={(a, b, c, extra) => { setFilterData(extra.currentDataSource) }} 
             />
@@ -162,7 +191,7 @@ const Account = () => {
                 accordion
                 expandIcon={({ isActive }) => <CaretRightOutlined style={{color: '#06e9ed'}} rotate={isActive ? 90 : 0} />}
             >
-                {data.map((item, ind) => 
+                {accountData?.map((item, ind) => 
                     <Collapse.Panel 
                         style={{textAlign: 'left'}} 
                         header={`${item.username} - ${item.name}`} 
