@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Tag, DatePicker, message } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 import moment from 'moment';
 import { getToken } from '../../../utils/localStorageHandler';
 import userApi from '../../../api/userApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getListAccount } from '../../../features/manager/account/accountAction';
 
 const ChangeTime = ({ data, isMultiple }) => {
     const { control, handleSubmit, formState: { errors }, setValue } = useForm();
     const dispatch = useDispatch();
+    const user = useSelector(state => state.user.userObj);
 
     const onSubmit = async (formData) => {
         try {
             console.log("prop data: ", data);
             console.log("submit change time data:  ", formData);
             
+            let response;
+
             if(!isMultiple) {
-                let response = await userApi.changeTimeAccount({
+                response = await userApi.changeTimeAccount({
                     access_token: getToken(), 
                     data: {
                         username: data.username, 
@@ -28,7 +31,7 @@ const ChangeTime = ({ data, isMultiple }) => {
                 console.log("change response: ", response);
 
             } else {
-                let response = await userApi.changeTimeListAccount({
+                response = await userApi.changeTimeListAccount({
                     access_token: getToken(), 
                     data: {
                         usernames: data, 
@@ -40,7 +43,7 @@ const ChangeTime = ({ data, isMultiple }) => {
             }
 
             message.success({
-                content: "Thay đổi thời gian khai báo thành công",
+                content: response?.message,
                 style: {marginTop: '72px'},
                 key: "changetime-msg"
             })
@@ -59,8 +62,10 @@ const ChangeTime = ({ data, isMultiple }) => {
 
     useEffect(() => {
         if(!isMultiple) {
-            setValue("startTime", moment.utc(data.start).local());
-            setValue("endTime", moment.utc(data.end).local())
+            if(data.start && data.end) {
+                setValue("startTime", moment.utc(data.start).local());
+                setValue("endTime", moment.utc(data.end).local())
+            }
         }
 
     }, [data])
@@ -85,6 +90,10 @@ const ChangeTime = ({ data, isMultiple }) => {
                                         value={field.value} 
                                         showTime 
                                         onChange={(date) => field.onChange(date)}
+                                        disabledDate={(cur) => 
+                                            (cur > moment.utc(user?.end).local() || 
+                                            cur < moment.utc(user?.start).local())
+                                        }
                                     />
                                 }
                             />
@@ -102,6 +111,10 @@ const ChangeTime = ({ data, isMultiple }) => {
                                         value={field.value} 
                                         showTime 
                                         onChange={(date) => field.onChange(date)}
+                                        disabledDate={(cur) => 
+                                            (cur > moment.utc(user?.end).local() || 
+                                            cur < moment.utc(user?.start).local())
+                                        }
                                     />
                                 }
                             />

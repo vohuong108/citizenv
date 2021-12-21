@@ -61,7 +61,9 @@ const ChangeState = ({ isMultiple, data }) => {
 
     useEffect(() => {
         if(!isMultiple) {
-            setValue("state", data?.state);
+            if(data.state) {
+                setValue("state", data?.state);
+            }
         }
     }, [data])
 

@@ -6,6 +6,7 @@ import moment from "moment";
 import { useSelector, useDispatch } from 'react-redux';
 import userApi from '../../api/userApi';
 import { getToken } from '../../utils/localStorageHandler';
+import axios from 'axios';
 
 const Register = () => {
     const [accountLevel, setAccountLevel] = useState(null);
@@ -53,6 +54,8 @@ const Register = () => {
             console.log("response register: ", response);
 
             let res_location = await getListLocation();
+            setValue("location", "");
+            setValue("username", "");
         }
     }
 
@@ -101,6 +104,7 @@ const Register = () => {
                             <label>Tên đăng nhập</label>
                             <input type="text" disabled {...register("username")}/>
                         </div>
+
                         <div className="form-item">
                             <label>Mật khẩu</label>
                             <input name="password" type="password" {...register("password", { required: "Vui lòng nhập mật khẩu." })}/>
@@ -112,46 +116,7 @@ const Register = () => {
                             <input name="confirm" type="password" {...register("confirm", { required: "Vui lòng nhập lại mật khẩu." })}/>
                         </div>
                         {errors.confirm && <p className="err-msg">{errors.confirm.message}</p>}
-                        {/* <Row>
-                            <Col xs={24} sm={12}>
-                                <div className="form-item">
-                                    <Tag color="cyan" className="start-label">Ngày bắt đầu </Tag>
-                                    <Controller
-                                        name="release_date"
-                                        control={control}
-                                        rules={{ required: true }}
-                                        render={({ field }) => 
-                                            <DatePicker 
-                                                dropdownClassName="register-date-picker" 
-                                                value={field.value} 
-                                                showTime 
-                                                onChange={(date) => field.onChange(date)}
-                                            />
-                                        }
-                                    />
-                                    {errors.release_date?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày bắt đầu</p>}
-                                </div>
-                            </Col>
-                            <Col xs={24} sm={12}>
-                                <div className="form-item">
-                                    <Tag color="#f50" className="end-label">Ngày kết thúc </Tag>
-                                    <Controller
-                                        name="finish_date"
-                                        control={control}
-                                        rules={{ required: true }}
-                                        render={({ field }) => 
-                                            <DatePicker 
-                                                dropdownClassName="register-date-picker"
-                                                value={field.value} 
-                                                showTime 
-                                                onChange={(date) => field.onChange(date)}
-                                            />
-                                        }
-                                    />
-                                    {errors.finish_date?.type === 'required' && <p className="err-msg">Vui lòng chọn ngày kết thúc</p>}
-                                </div>
-                            </Col>
-                        </Row> */}
+
                         <div className="form-item">
                             <label className="label-select">Trạng thái</label>
                             <Controller 
@@ -186,7 +151,8 @@ const SelectAppend = ({ data, nextId, setValue, field }) => {
 
     const handleAppend = () => {
         if(inputValue.trim() !== "") {
-            setAccData([...accData, {username: accData?.length, location: inputValue, enable: true}])
+            setAccData([...accData, {username: accData?.length, location: inputValue, enable: true}]);
+            setInputValue("");
         }
     }
 
@@ -202,6 +168,7 @@ const SelectAppend = ({ data, nextId, setValue, field }) => {
                 return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }}
             placeholder="Vui lòng thêm đơn vị"
+            value={field.value}
             onChange={(value) => {
                 field.onChange(value);
                 console.log("on change: ", value); 

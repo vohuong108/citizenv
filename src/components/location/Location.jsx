@@ -1,7 +1,6 @@
 import React from 'react';
 import { Select } from 'antd';
 import { Controller } from 'react-hook-form';
-import { CaretRightOutlined } from '@ant-design/icons';
 
 const Location = ( { className = null, name, control, placeholder = "", onSearch, data, message, errors = null, style = null}) => {
     return (

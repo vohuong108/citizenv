@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 
-const final_base = "https://b151-2001-ee0-41a1-7427-20b7-c0e7-f389-380c.ngrok.io";
+const final_base = "https://0d76-2001-ee0-41a1-7427-6d0b-2e3d-5e4b-ebe5.ngrok.io";
 
 const userApi = {
     login: async (data) => {
@@ -119,7 +119,7 @@ const userApi = {
     },
     getListProvinceVn: async (data) => {
         const response = await axios({
-            url: `${final_base}/user/account`,
+            url: `${final_base}/location/city`,
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${data.access_token}`,

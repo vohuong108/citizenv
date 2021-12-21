@@ -7,6 +7,7 @@ import moment from 'moment';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { DownloadOutlined  } from '@ant-design/icons';
 import { removeAscent } from "../../utils/validate";
+import axios from "axios";
 
 function isFullnameValid (string) {
     var re = /^[a-zA-Z]{2,}(?: [a-zA-Z]+){1,}$/g // regex here
@@ -48,7 +49,7 @@ export default function Declare ({type = "declare"}) {
                                     autoComplete="off"
                                     {...registerInfo("fullname", { 
                                         required: "Vui lòng nhập họ tên.", 
-                                        validate: (value) => isFullnameValid(value) ? '' : "Vui lòng nhập đúng định dạng"
+                                        validate: (value) => isFullnameValid(value) ? true : "Vui lòng nhập đúng định dạng"
                                     })} 
                                 />
                             </div>
@@ -123,7 +124,7 @@ export default function Declare ({type = "declare"}) {
                                     type="text" 
                                     {...registerInfo("religion", { 
                                         required: "Vui lòng nhập tôn giáo.",
-                                        validate: (value) => isReligionValid(value) ? '' : "Vui lòng nhập đúng định dạng"
+                                        validate: (value) => isReligionValid(value) ? true : "Vui lòng nhập đúng định dạng"
                                     })} 
                                 />
                             </div>
@@ -212,93 +213,46 @@ export default function Declare ({type = "declare"}) {
 const AddressOption = ({ control, errors }) => {
     const [type, setType] = useState("regulary");
 
-    const [addressData, setAddressData] = useState({
-        provinces: [],
-        districts: [],
-        wards: [],
-        hamlets: [],
-    });
-
-    const [selectedLocation, setSelectedLocation] = useState({
-        province: null,
-        district: null,
-        ward: null,
-        hamlet: null,
-    })
-    const onSearch = (value) => {}
-
-    const provinceData = [
-        {id: 1, name: "hà nội"},
-        {id: 2, name: "đà nẵng"},
-        {id: 3, name: "hồ chí minh"},
-    ];
-
-    useEffect(() => {
-        //TODO get list province in vn
-
-    }, [])
-
     return (
         <>
-            <div className="form-row-address-1">
-                <h3>Quê Quán <span className="text-danger">*</span></h3>
-                <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]}>
-                    <Col className="col-address-select" xs={24} sm={12} md={6}>
-                        <label>Thôn/Bản</label>
-                        <Location
-                            className="location-1" 
-                            name="hamlet1"
-                            errors={errors}
-                            control={control}
-                            message="Vui lòng chọn thôn/bản"
-                            onSearch={onSearch}
-                            data={selectedLocation?.hamlet}
-                            placeholder="Thôn/Bản"
-                        />
-                    </Col>
-                    <Col className="col-address-select" xs={24} sm={12} md={6}>
-                        <label>Xã/Phường</label>
-                        <Location
-                            className="location-1" 
-                            name="ward1"
-                            errors={errors}
-                            control={control}
-                            message="Vui lòng chọn xã/phường"
-                            onSearch={onSearch}
-                            data={selectedLocation?.ward}
-                            placeholder="Xã/Phường"
-                        />
-                    </Col>
-                    <Col className="col-address-select" xs={24} sm={12} md={6}>
-                        <label>Huyện/Quận</label>
-                        <Location
-                            className="location-1" 
-                            name="district1"
-                            errors={errors}
-                            control={control}
-                            message="Vui lòng chọn huyện/quận"
-                            onSearch={onSearch}
-                            data={selectedLocation?.district}
-                            placeholder="Huyện/Quận"
-                        />
-                    </Col>
-                    <Col className="col-address-select" xs={24} sm={12} md={6}>
-                        <label>Tỉnh/Thành</label>
-                        <Location
-                            className="location-1" 
-                            name="province1"
-                            errors={errors}
-                            control={control}
-                            message="Vui lòng chọn tỉnh/thành"
-                            onSearch={onSearch}
-                            data={selectedLocation?.province}
-                            placeholder="Tỉnh/Thành"
-                        />
-                    </Col>
-                </Row>
-            </div>
+            <ExpandLand 
+                control={control} 
+                errors={errors}
+                className="form-row-address-1"
+                title="Quê Quán "
+                propChild={[
+                    {
+                        className: "location-1",
+                        name: "provinceNativeExpand",
+                        message: "Vui lòng chọn tỉnh/thành",
+                        placeholder: "Tỉnh/Thành",
+                        type: "province",
+                        label: "Tỉnh/Thành"
+                    }, {
+                        className: "location-1",
+                        name: "districtNativeExpand",
+                        message: "Vui lòng chọn huyện/quận",
+                        placeholder: "Huyện/Quận",
+                        type: "district",
+                        label: "Huyện/Quận"
+                    }, {
+                        className: "location-1",
+                        name: "wardNativeExpand",
+                        message: "Vui lòng chọn xã/phường",
+                        placeholder: "Xã/Phường",
+                        type: "ward",
+                        label: "Xã/Phường"
+                    }, {
+                        className: "location-1",
+                        name: "hamletNativeExpand",
+                        message: "Vui lòng chọn thôn/bản",
+                        placeholder: "Thôn/Bản",
+                        type: "hamlet",
+                        label: "Thôn/Bản"
+                    }
+                ]}
+            />
             <Divider />
-
             <div className="select-declare-type">
                 <label>Đối tượng khai báo</label>
                 <Switch 
@@ -310,100 +264,127 @@ const AddressOption = ({ control, errors }) => {
             </div>
 
             {type === "regulary"
-                ? <div className="form-item-address-only">
-                    <h3>Địa Chỉ Thường Trú <span className="text-danger">*</span></h3>
-                    <Location 
-                        name="hamlet2"
-                        control={control}
-                        message="Vui lòng chọn thôn/bản của nơi thường trú"
-                        onSearch={onSearch}
-                        data={selectedLocation?.hamlet}
-                        placeholder="Thôn/Bản"
-                        style={{width: '120px'}}
-                    />
-                    <span>{", xã Quỳnh Hoa, huyện Quỳnh Lưu, tỉnh Nghệ An"}</span>
-                    {errors?.hamlet2 && <p className="err-msg">{errors?.hamlet2?.message}</p>}
-                </div>
-                : <div className="form-row-address-2">
-                    <h3>Địa Chỉ Thường Trú <span className="text-danger">*</span></h3>
-                    <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]} >
-                        <Col className="col-address-select" xs={24} sm={12} md={6}>
-                            <label>Thôn/Bản</label>
-                            <Location
-                                className="location-2" 
-                                name="hamlet1"
-                                errors={errors}
-                                control={control}
-                                message="Vui lòng chọn thôn/bản"
-                                onSearch={onSearch}
-                                data={selectedLocation?.hamlet}
-                                placeholder="Thôn/Bản"
-                            />
-                        </Col>
-                        <Col className="col-address-select" xs={24} sm={12} md={6}>
-                            <label>Xã/Phường</label>
-                            <Location
-                                className="location-2" 
-                                name="ward1"
-                                errors={errors}
-                                control={control}
-                                message="Vui lòng chọn xã/phường"
-                                onSearch={onSearch}
-                                data={selectedLocation?.ward}
-                                placeholder="Xã/Phường"
-                            />
-                        </Col>
-                        <Col className="col-address-select" xs={24} sm={12} md={6}>
-                            <label>Huyện/Quận</label>
-                            <Location
-                                className="location-2" 
-                                name="district1"
-                                errors={errors}
-                                control={control}
-                                message="Vui lòng chọn huyện/quận"
-                                onSearch={onSearch}
-                                data={selectedLocation?.district}
-                                placeholder="Huyện/Quận"
-                            />
-                        </Col>
-                        <Col className="col-address-select" xs={24} sm={12} md={6}>
-                            <label>Tỉnh/Thành</label>
-                            <Location
-                                className="location-2" 
-                                name="province1"
-                                errors={errors}
-                                control={control}
-                                message="Vui lòng chọn tỉnh/thành"
-                                onSearch={onSearch}
-                                data={selectedLocation?.province}
-                                placeholder="Tỉnh/Thành"
-                            />
-                        </Col>
-                    </Row>
-                </div>
+                ? <StrictLand 
+                    name='hamletRegularyStrict'
+                    control={control}
+                    errors={errors}
+                    message="Vui lòng chọn thôn/bản của nơi thường trú"
+                    title="Địa Chỉ Thường Trú"
+                    placeholder="Thôn/Bản"
+                />
+                : <ExpandLand 
+                    control={control} 
+                    errors={errors}
+                    className="form-row-address-2"
+                    title="Địa Chỉ Thường Trú "
+                    propChild={[
+                        {
+                            className: "location-2",
+                            name: "provinceRegularyExpand",
+                            message: "Vui lòng chọn tỉnh/thành",
+                            placeholder: "Tỉnh/Thành",
+                            type: "province",
+                            label: "Tỉnh/Thành"
+                        }, {
+                            className: "location-2",
+                            name: "districtRegularyExpand",
+                            message: "Vui lòng chọn huyện/quận",
+                            placeholder: "Huyện/Quận",
+                            type: "district",
+                            label: "Huyện/Quận"
+                        }, {
+                            className: "location-2",
+                            name: "wardRegularyExpand",
+                            message: "Vui lòng chọn xã/phường",
+                            placeholder: "Xã/Phường",
+                            type: "ward",
+                            label: "Xã/Phường"
+                        }, {
+                            className: "location-2",
+                            name: "hamletRegularyExpand",
+                            message: "Vui lòng chọn thôn/bản",
+                            placeholder: "Thôn/Bản",
+                            type: "hamlet",
+                            label: "Thôn/Bản"
+                        }
+                    ]}
+                />
             }
             {type === "temporary" &&
-                <div className="form-item-address-only">
-                    <h3>Địa Chỉ Tạm Trú<span className="text-danger">*</span></h3>
-                    <Location 
-                        name="hamlet3"
-                        control={control}
-                        message="Vui lòng chọn thôn/bản của nơi tạm trú"
-                        onSearch={onSearch}
-                        data={selectedLocation?.hamlet}
-                        placeholder="Thôn/Bản"
-                        style={{width: '120px'}}
-                    />
-                    <span>{", xã Quỳnh Hoa, huyện Quỳnh Lưu, tỉnh Nghệ An"}</span>
-                    {errors?.hamlet3 && <p className="err-msg">{errors?.hamlet3?.message}</p>}
-                </div>
+                <StrictLand 
+                    name='hamletTemporaryStrict'
+                    control={control}
+                    errors={errors}
+                    message="Vui lòng chọn thôn/bản của nơi tạm trú"
+                    title="Địa Chỉ Tạm Trú"
+                    placeholder="Thôn/Bản"
+                />
             }
         </>
     )
 }
 
-const NativeLand = () => {
+const ExpandLand = ({ control, errors, className, title, propChild }) => {
+    const [addressData, setAddressData] = useState({
+        provinces: [{id: "01", name: "Hà nội"}],
+        districts: [{id: "0101", name: "Thanh Xuân"}],
+        wards: [{id: "010101", name: "Nhân Chính"}],
+        hamlets: [{id: "01010101", name: "Tổ 1"}],
+    });
+
+    const [selectedLocation, setSelectedLocation] = useState({
+        province: null,
+        district: null,
+        ward: null,
+        hamlet: null,
+    });
+
+    const handleAssignData = (type) => {
+        if(type === 'hamlet') return addressData?.hamlets
+        else if(type === 'ward') return addressData?.wards
+        else if(type === 'district') return addressData?.districts
+        else if(type === 'province') return addressData?.provinces
+    }
+
     return (
-        <></>
+        <div className={className}>
+            <h3>{title}<span className="text-danger">*</span></h3>
+            <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]} >
+                {propChild?.map((item, ind) =>
+                    <Col key={ind} className="col-address-select" xs={24} sm={12} md={6}>
+                        <label>{item.label}</label>
+                        <Location
+                            className={item.className} 
+                            name={item.name}
+                            errors={errors}
+                            control={control}
+                            message={item.message}
+                            data={handleAssignData(item?.type)}
+                            placeholder={item.placeholder}
+                        />
+                    </Col>
+                )}
+            </Row>
+        </div>
+    )
+}
+
+const StrictLand = ({ name, control, errors, message, title, placeholder}) => {
+    const [data, setData] = useState([{id: "01010101", name: "Tổ 1"}]);
+
+    return (
+        <div className="form-item-address-only">
+            <h3>{title}<span className="text-danger">*</span></h3>
+            <Location 
+                name={name}
+                control={control}
+                message={message}
+                data={data}
+                placeholder={placeholder}
+                style={{width: '120px'}}
+            />
+            <span>{", xã Quỳnh Hoa, huyện Quỳnh Lưu, tỉnh Nghệ An"}</span>
+            {errors[name] && <p className="err-msg">{errors[name]?.message}</p>}
+        </div>
     )
 }

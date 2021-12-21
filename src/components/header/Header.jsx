@@ -132,7 +132,8 @@ const MenuDrawerLeft = ({ history }) => {
                             </div>
                             <div className="menu-features">
                                 <ul>
-                                    <li><Link to="/profile">My Profile</Link></li>
+                                    <li><Link to="/profile">Hồ sơ của tôi</Link></li>
+                                    <li><Link to="/declare">Khai báo thông tin</Link></li>
                                     <li onClick={handleLogOut}>Log out</li>
                                 </ul>
                             </div>

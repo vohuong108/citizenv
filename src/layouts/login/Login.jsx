@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { LockFilled, UserOutlined} from '@ant-design/icons'
 import { Spin, message, Row, Col } from 'antd';
 import { Link } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { getToken, setToken } from '../../utils/localStorageHandler';
+import { setToken } from '../../utils/localStorageHandler';
 import { login } from "../../features/user/userAction";
 import { unwrapResult } from '@reduxjs/toolkit';
 

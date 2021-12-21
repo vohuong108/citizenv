@@ -172,9 +172,11 @@ const Account = () => {
                     />
                 </Col>
                 <Col >
-                    <Link to="/register">
-                        <button className="btn-create-account">Cấp tài khoản</button>
-                    </Link>
+                    {user?.userRole !== "ROLE_B2" &&
+                        <Link to="/register">
+                            <button className="btn-create-account">Cấp tài khoản</button>
+                        </Link>
+                    }
                     <ExportData placement="bottomRight" data={filterData}/>
                 </Col>
             </Row>
