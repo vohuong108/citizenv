@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 
-const final_base = "https://0d76-2001-ee0-41a1-7427-6d0b-2e3d-5e4b-ebe5.ngrok.io";
+const final_base = "https://34dc-2001-ee0-41a1-7427-88e6-791c-2e81-d5c9.ngrok.io";
 
 const userApi = {
     login: async (data) => {
@@ -130,18 +130,33 @@ const userApi = {
     },
     getListDistrictByProvince: async (data) => {
         const response = await axios({
-            url: `${final_base}/user/account`,
+            url: `${final_base}/location/district/${data.cityId}`,
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${data.access_token}`,
                 "Content-Type": "application/json"
             },
+        })
+        return response.data;
+    },
+    getListDistrictByManyProvince: async (data) => {
+        const response = await axios({
+            url: `${final_base}/location/district`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            params: data.params,
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
         })
         return response.data;
     },
     getListWardByDistrict: async (data) => {
         const response = await axios({
-            url: `${final_base}/user/account`,
+            url: `${final_base}/location/ward/${data.districtId}`,
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${data.access_token}`,
@@ -150,10 +165,102 @@ const userApi = {
         })
         return response.data;
     },
+    getListWardByManyDistrict: async (data) => {
+        const response = await axios({
+            url: `${final_base}/location/ward`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            params: data.params,
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
+        })
+        return response.data;
+    },
     getListHamletByWard: async (data) => {
         const response = await axios({
-            url: `${final_base}/user/account`,
+            url: `${final_base}/location/village/${data.wardId}`,
             method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+        })
+        return response.data;
+    },
+    getListHamletByManyWard: async (data) => {
+        const response = await axios({
+            url: `${final_base}/location/village`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            params: data.params,
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
+        })
+        return response.data;
+    },
+    declare: async (data) => {
+        const response = await axios({
+            url: `${final_base}/people/save`,
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: data.data
+        })
+        return response.data;
+    },
+    editPersonInfo: async (data) => {
+        const response = await axios({
+            url: `${final_base}/people/edit`,
+            method: 'PUT',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: data.data
+        })
+        return response.data;
+    },
+    getListPopulation: async (data) => {
+        const response = await axios({
+            url: `${final_base}/people/location`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            params: data.params,
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
+        })
+        
+        return response.data;
+    },
+    viewPersonalInfo: async (data) => {
+        const response = await axios({
+            url: `${final_base}/people/${data.id}`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+        })
+        return response.data;
+    },
+    deletePersonalInfo: async (data) => {
+        const response = await axios({
+            url: `${final_base}/people/${data.id}`,
+            method: 'DELETE',
             headers: {
                 "Authorization": `Bearer ${data.access_token}`,
                 "Content-Type": "application/json"

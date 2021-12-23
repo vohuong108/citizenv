@@ -2,7 +2,17 @@ import React from 'react';
 import { Select } from 'antd';
 import { Controller } from 'react-hook-form';
 
-const Location = ( { className = null, name, control, placeholder = "", onSearch, data, message, errors = null, style = null}) => {
+const Location = ( { 
+    className = null, 
+    name, control, 
+    placeholder = "",
+    data, 
+    message, 
+    errors = null, 
+    style = null, 
+    handleChange,
+    handleClear=null,
+}) => {
     return (
         <>
         <Controller 
@@ -13,13 +23,12 @@ const Location = ( { className = null, name, control, placeholder = "", onSearch
                 <Select
                     className={className}
                     showSearch
+                    allowClear
                     placeholder={placeholder}
                     style={style}
                     optionFilterProp="children"
-                    onChange={(value) => {
-                        field.onChange(value);
-                    }}
-                    onSearch={onSearch}
+                    value={field.value}
+                    onChange={(value) => handleChange(field, value)}
                     filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }

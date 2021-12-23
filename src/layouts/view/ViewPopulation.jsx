@@ -1,27 +1,23 @@
-import { Collapse, Table, Divider, Button } from 'antd';
-import React, { useState } from 'react';
+import { Collapse, Table, Divider } from 'antd';
+import React, { useState, useEffect } from 'react';
 import ViewOption from './ViewOption';
 import ViewPersonal from './ViewPersonal';
 import { CaretRightOutlined } from '@ant-design/icons';
-
-const data = [
-    {name: 'Võ Văn Hướng', personalId: '187925748', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020302", religion: "Không"},
-    {name: 'Võ Văn Hậu', personalId: '187925747', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020301", religion: "Không", },
-    {name: 'Võ Văn Hướng', personalId: '187925746', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020300", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925745', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020299", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925744', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020298", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925743', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020297", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925742', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020296", religion: "Không", },
-    {name: 'Võ Văn Hướng', personalId: '187925741', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020295", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925740', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020294", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925739', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020293", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925738', gender: 'Nữ', dateOfBirth: "10/08/2001", addressCode: "01020292", religion: "Không"},
-    {name: 'Võ Văn Hướng', personalId: '187925737', gender: 'Nam', dateOfBirth: "10/08/2001", addressCode: "01020291", religion: "Không"}
-]
+import { useSelector, useDispatch } from 'react-redux';
+import { getToken } from '../../utils/localStorageHandler';
+import { getListPopulation } from '../../features/manager/population/populationAction';
+import qs from 'query-string';
+import { useLocation, useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 
 const ViewPopulation = () => {
-    const [filterData, setFilterData] = useState([...data]);
+    const [filterData, setFilterData] = useState([]);
+    const data = useSelector(state => state.population.listPopulation);
+    const totalPage = useSelector(state => state.population.totalPage);
+    const dispatch = useDispatch();
+    let location = useLocation();
+    let navigate = useNavigate();
 
     const columns = [
         {
@@ -31,8 +27,9 @@ const ViewPopulation = () => {
             sorter: (a, b) => a.name.localeCompare(b.name),
         }, {
             title: 'Số CCCD/CMND',
-            dataIndex: "personalId",
+            dataIndex: "citizenId",
             align: 'center',
+            render: (text) => text ? <>{text}</> : <>Không</>
         }, {
             title: 'Giới tính',
             dataIndex: "gender",
@@ -47,9 +44,10 @@ const ViewPopulation = () => {
             title: 'Ngày sinh',
             dataIndex: "dateOfBirth",
             align: 'center',
+            render: (text) => moment(text, 'YYYY/MM/DD').format("DD/MM/YYYY")
         }, {
             title: 'Mã thường trú',
-            dataIndex: "addressCode",
+            dataIndex: "regularyCode",
             align: 'center',
             sorter: (a, b) => parseInt(a.addressCode) - parseInt(b.addressCode),
         }, {
@@ -60,10 +58,46 @@ const ViewPopulation = () => {
         }, {
             title: 'Hành động',
             align: 'center',
-            render: (text) => <ViewPersonal />
+            dataIndex: "peopleId",
+            render: (id) => <ViewPersonal id={id} />
         },
     ];
 
+    const handleTableChange = (pagination, b, c, d) => {
+        console.log("pagination: ", pagination);
+        let params = {
+            size: pagination.pageSize,
+            page: pagination.current
+        }
+        
+        navigate(`/dashboard/population?${qs.stringify(params)}`);
+    }
+
+    useEffect(() => {
+        let getData = async (params) => {
+            let un_response = await dispatch(getListPopulation({
+                access_token: getToken(), 
+                params: params
+            }));
+            console.log("response list population: ", un_response);
+        }
+        
+        console.log("location view: ", location);
+
+        if(!location.search) {
+            let params = {
+                size: 100,
+                page: 1
+            }
+            navigate(`/dashboard/population?${qs.stringify(params)}`);
+            console.log("match in null")
+        } else {
+            getData(qs.parse(location.search));
+            console.log("match in not null")
+        }
+
+    }, [location.search])
+    // setFilterData(extra.currentDataSource)
     return (
         <div className="view-population">
             <h2>DANH SÁCH THÔNG TIN DÂN SỐ</h2>
@@ -74,27 +108,31 @@ const ViewPopulation = () => {
                     className="view-population-table"
                     columns={columns} 
                     dataSource={data}
-                    rowKey="personalId"
-                    onChange={(a, b, c, extra) => { setFilterData(extra.currentDataSource) }} 
+                    rowKey="peopleId"
+                    onChange={(a, b, c, extra) => handleTableChange(a, b, c, extra)}
+                    pagination={{
+                        total: totalPage,
+                        defaultPageSize: 100,
+                    }}
                 />
                 <Collapse 
                     className="view-population-collapse"
                     accordion
                     expandIcon={({ isActive }) => <CaretRightOutlined style={{color: '#06e9ed'}} rotate={isActive ? 90 : 0} />}
                 >
-                    {data.map((item, ind) => 
+                    {data?.map((item, ind) => 
                         <Collapse.Panel 
                             style={{textAlign: 'left'}} 
-                            header={`${item.name} - ${item.personalId}`} 
+                            header={`${item.name}${item.citizenId && ` - ${item.citizenId}`}`} 
                             key={ind}
                         >
                             <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Họ Tên: ${item.name}`}</p>
-                            <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Số CCCD/CMND: ${item.personalId}`}</p>
+                            <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Số CCCD/CMND: ${item.citizenId}`}</p>
                             <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Giới Tính: ${item.gender}`}</p>
-                            <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Ngày Sinh: ${item.dateOfBirth}`}</p>
-                            <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Mã Thường Trú: ${item.addressCode}`}</p>
+                            <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Ngày Sinh: ${moment(item.dateOfBirth, 'YYYY/MM/DD').format("DD/MM/YYYY")}`}</p>
+                            <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Mã Thường Trú: ${item.regularyCode}`}</p>
                             <p style={{fontWeight: '500', marginBottom: '16px'}}>{`Tôn giáo: ${item.religion}`}</p>
-                            <ViewPersonal />
+                            <ViewPersonal key={ind} id={item.peopleId}/>
                         </Collapse.Panel>
                     )}
                 </Collapse>

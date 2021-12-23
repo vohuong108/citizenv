@@ -1,4 +1,4 @@
-import { Divider, Row, Col, Select, DatePicker, Switch, Button } from 'antd';
+import { Divider, Row, Col, Select, DatePicker, Switch, Button, message } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from "react-hook-form";
 import Location from '../../components/location/Location';
@@ -7,7 +7,12 @@ import moment from 'moment';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { DownloadOutlined  } from '@ant-design/icons';
 import { removeAscent } from "../../utils/validate";
-import axios from "axios";
+import userApi from "../../api/userApi";
+import { getToken } from "../../utils/localStorageHandler";
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getPersonInfo } from '../../features/manager/population/populationAction';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 function isFullnameValid (string) {
     var re = /^[a-zA-Z]{2,}(?: [a-zA-Z]+){1,}$/g // regex here
@@ -19,12 +24,147 @@ function isReligionValid (string) {
     return re.test(removeAscent(string))
 }
 
-export default function Declare ({type = "declare"}) {
+export default function Declare ({type = "DECLARE"}) {
+    const { control, 
+        register: registerInfo, 
+        handleSubmit: handleSubmitInfo, 
+        setValue, 
+        formState: { errors }, 
+        setError,
+        unregister 
+    } = useForm();
+    const user = useSelector(state => state.user.userObj);
+    const { id } = useParams();
 
-    const { control, register: registerInfo, handleSubmit: handleSubmitInfo, setValue, formState: { errors }, setError } = useForm();
+    const onHandleSubmit = async (formData)=>{
+        console.log("formData: ", formData);
 
-    const onHandleSubmit = (data)=>{
-        console.log(data);
+        if(user) {
+            let handleLocationCode = () => {
+                if(user.userRole === 'ROLE_B1' && !formData.hamletTemporaryStrict) {
+                    return [
+                        {
+                            village: {
+                                villageId: formData.hamletNativeExpand.trim()
+                            },
+                            locationType: "quê quán",
+                        }, {
+                            village: {
+                                villageId: formData.hamletRegularyStrict.trim()
+                            },
+                            locationType: "thường trú"
+                        }
+                    ]
+                } else if(user.userRole === 'ROLE_B1' && formData.hamletTemporaryStrict) {
+                    return [
+                        {
+                            village: {
+                                villageId: formData.hamletNativeExpand.trim()
+                            },
+                            locationType: "quê quán",
+                        }, {
+                            village: {
+                                villageId: formData.hamletRegularyExpand.trim()
+                            },
+                            locationType: "thường trú"
+                        }, {
+                            village: {
+                                villageId: formData.hamletTemporaryStrict.trim()
+                            },
+                            locationType: "tạm trú"
+                        }
+                    ]
+                } else if(user.userRole === 'ROLE_B2' && !formData.hamletTemporaryStrict) {
+                    return [
+                        {
+                            village: {
+                                villageId: formData.hamletNativeExpand.trim()
+                            },
+                            locationType: "quê quán",
+                        }, {
+                            village: {
+                                villageId: user.username.trim()
+                            },
+                            locationType: "thường trú"
+                        }
+                    ]
+                } else if(user.userRole === 'ROLE_B2' && formData.hamletTemporaryStrict) {
+                    return [
+                        {
+                            village: {
+                                villageId: formData.hamletNativeExpand.trim()
+                            },
+                            locationType: "quê quán",
+                        }, {
+                            village: {
+                                villageId: formData.hamletRegularyExpand.trim()
+                            },
+                            locationType: "thường trú"
+                        }, {
+                            village: {
+                                villageId: user.username.trim()
+                            },
+                            locationType: "tạm trú"
+                        }
+                    ]
+                }
+            }
+
+            try {
+                let response = null;
+                if(type === "DECLARE") {
+                    let requestData = {
+                        access_token: getToken(),
+                        data: {
+                            citizenId: formData.personalId,
+                            name: formData.fullname.trim().toLowerCase(),
+                            gender: formData.gender.trim(),
+                            religion: formData.religion.trim().toLowerCase(),
+                            educationLevel: formData.education.trim(),
+                            job: formData.career.trim().toLowerCase(),
+                            dateOfBirth: formData.dateOfBirth.format(),
+                            peopleLocations: handleLocationCode()
+                        }
+                    }
+                    console.log("request data declare: ", requestData);
+
+                    response =  await userApi.declare(requestData);
+                    console.log("response declare: ", response);
+                } else if(type === "EDIT") {
+                    let requestData = {
+                        access_token: getToken(),
+                        data: {
+                            peopleId: id,
+                            citizenId: formData.personalId,
+                            name: formData.fullname.trim().toLowerCase(),
+                            gender: formData.gender.trim(),
+                            religion: formData.religion.trim().toLowerCase(),
+                            educationLevel: formData.education.trim(),
+                            job: formData.career.trim().toLowerCase(),
+                            dateOfBirth: formData.dateOfBirth.format(),
+                            peopleLocations: handleLocationCode()
+                        }
+                    }
+                    console.log("request data edit: ", requestData);
+
+                    response =  await userApi.editPersonInfo(requestData);
+                    console.log("response edit: ", response);
+                }
+
+                message.success({
+                    content: response,
+                    style: {marginTop: '72px'},
+                    key: "declare-msg"
+                });
+            } catch (err) {
+                message.error({
+                    content: err.message,
+                    style: {marginTop: '72px'},
+                    key: "declare-msg"
+                });
+            }
+    
+        }
     }
 
     return (
@@ -70,6 +210,7 @@ export default function Declare ({type = "declare"}) {
                                             format="DD/MM/YYYY" 
                                             placeholder="ngày/tháng/năm"
                                             disabledDate={(current) => current && current > moment().endOf('day')}
+                                            value={field.value}
                                             onChange={(value) => {
                                                 field.onChange(value); 
                                             }}
@@ -195,7 +336,13 @@ export default function Declare ({type = "declare"}) {
                         </Col>                        
                     </Row>
                     <Divider />
-                    <AddressOption control={control} errors={errors}/>
+                    <AddressOption 
+                        control={control} 
+                        errors={errors} 
+                        setValue={setValue} 
+                        unregister={unregister} 
+                        layoutType={type}
+                    />
                     <div className="form-btn-wrap">
                         <input value={type === "EDIT" ? "Cập Nhật" : "Kê Khai Thông Tin"} type="submit" />
                         {type !== "EDIT" && 
@@ -210,8 +357,80 @@ export default function Declare ({type = "declare"}) {
     )
 }
 
-const AddressOption = ({ control, errors }) => {
+const AddressOption = ({ control, errors, setValue, unregister, layoutType }) => {
     const [type, setType] = useState("regulary");
+    const user = useSelector(state => state.user.userObj);
+    const currentPersonInfo = useSelector(state => state.population.currentPerson);
+    const dispatch = useDispatch();
+    const { id } = useParams();
+
+    let handleChangeSwitch = (checked) => {
+        if(checked) {
+            setType("regulary");
+            if(user?.userRole === "ROLE_B2") {
+                setValue("hamletTemporaryStrict", null);
+                setValue("hamletRegularyStrict", user.username);
+            } else if (user?.userRole === "ROLE_B1") {
+                setValue("hamletTemporaryStrict", null);
+            }
+        } else {
+            setType("temporary");
+            if(user?.userRole === "ROLE_B2") {
+                setValue("hamletTemporaryStrict", user.username);
+                setValue("hamletRegularyStrict", null);
+            } else if (user?.userRole === "ROLE_B1") {
+                setValue("hamletTemporaryStrict", null);
+            }
+        }
+    }
+
+    useEffect(() => {
+        if(layoutType === "DECLARE" && user?.userRole === "ROLE_B2") {
+            setValue("hamletTemporaryStrict", null);
+            setValue("hamletRegularyStrict", user.username);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        console.log("id 2: ", id);
+        let getInfo = async (id) => {
+            let response = await dispatch(getPersonInfo({
+                access_token: getToken(),
+                id: id
+            }));
+    
+            console.log("response in getInfo: ", unwrapResult(response));
+        }
+
+        if(layoutType === "EDIT") {
+            getInfo(id);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        if(layoutType === "EDIT" && currentPersonInfo) {
+        
+            if(currentPersonInfo.peopleLocations.length === 3) {
+                setType("temporary");
+                let t = currentPersonInfo.peopleLocations.find(el => el.locationType === "tạm trú");
+                setValue("hamletTemporaryStrict", t.village.villageId);
+            }
+            else if (currentPersonInfo.peopleLocations.length === 2) {
+                setType("regulary");
+                let r = currentPersonInfo.peopleLocations.find(el => el.locationType === "thường trú");
+                setValue("hamletRegularyStrict", r.village.villageId);
+            }
+            setValue("fullname", currentPersonInfo.name, { shouldValidate: true });
+            setValue("dateOfBirth", moment(currentPersonInfo.dateOfBirth, "YYYY-MM-DD"), { shouldValidate: true });
+            setValue("fullname", currentPersonInfo.name, { shouldValidate: true });
+            setValue("personalId", currentPersonInfo.citizenId, { shouldValidate: true });
+            setValue("phone", currentPersonInfo.phone, { shouldValidate: true });
+            setValue("religion", currentPersonInfo.religion, { shouldValidate: true });
+            setValue("education", currentPersonInfo.educationLevel, { shouldValidate: true });
+            setValue("career", currentPersonInfo.job, { shouldValidate: true });
+            setValue("gender", currentPersonInfo.gender, { shouldValidate: true });
+        }
+    }, [currentPersonInfo]);
 
     return (
         <>
@@ -220,6 +439,10 @@ const AddressOption = ({ control, errors }) => {
                 errors={errors}
                 className="form-row-address-1"
                 title="Quê Quán "
+                setValue={setValue}
+                landType="native"
+                unregister={unregister}
+                layoutType={layoutType}
                 propChild={[
                     {
                         className: "location-1",
@@ -259,7 +482,8 @@ const AddressOption = ({ control, errors }) => {
                     unCheckedChildren="Tạm Trú" 
                     checkedChildren="Thường Trú" 
                     defaultChecked 
-                    onChange={(checked) => checked ? setType("regulary") : setType("temporary")}
+                    checked={type === "regulary" ? true : false}
+                    onChange={(checked) => handleChangeSwitch(checked)}
                 />
             </div>
 
@@ -271,12 +495,17 @@ const AddressOption = ({ control, errors }) => {
                     message="Vui lòng chọn thôn/bản của nơi thường trú"
                     title="Địa Chỉ Thường Trú"
                     placeholder="Thôn/Bản"
+                    layoutType={layoutType}
                 />
                 : <ExpandLand 
                     control={control} 
                     errors={errors}
                     className="form-row-address-2"
                     title="Địa Chỉ Thường Trú "
+                    setValue={setValue}
+                    landType="regulary"
+                    unregister={unregister}
+                    layoutType={layoutType}
                     propChild={[
                         {
                             className: "location-2",
@@ -318,33 +547,184 @@ const AddressOption = ({ control, errors }) => {
                     message="Vui lòng chọn thôn/bản của nơi tạm trú"
                     title="Địa Chỉ Tạm Trú"
                     placeholder="Thôn/Bản"
+                    layoutType={layoutType}
                 />
             }
         </>
     )
 }
 
-const ExpandLand = ({ control, errors, className, title, propChild }) => {
+const ExpandLand = ({ control, errors, setValue, className, title, propChild, landType, unregister, layoutType }) => {
     const [addressData, setAddressData] = useState({
-        provinces: [{id: "01", name: "Hà nội"}],
-        districts: [{id: "0101", name: "Thanh Xuân"}],
-        wards: [{id: "010101", name: "Nhân Chính"}],
-        hamlets: [{id: "01010101", name: "Tổ 1"}],
+        provinces: [],
+        districts: [],
+        wards: [],
+        hamlets: [],
     });
+    const currentPersonInfo = useSelector(state => state.population.currentPerson);
 
-    const [selectedLocation, setSelectedLocation] = useState({
-        province: null,
-        district: null,
-        ward: null,
-        hamlet: null,
-    });
-
-    const handleAssignData = (type) => {
+    let handleAssignData = (type) => {
         if(type === 'hamlet') return addressData?.hamlets
         else if(type === 'ward') return addressData?.wards
         else if(type === 'district') return addressData?.districts
         else if(type === 'province') return addressData?.provinces
     }
+
+    let getListProvince = async () => {
+        let response = await userApi.getListProvinceVn({access_token: getToken()});
+        console.log("res province: ", response);
+        setAddressData((state) => ({
+            ...state,
+            provinces: response?.map(item => ({id: item.cityId, name: item.cityName}))
+        }))
+    }  
+
+    let getListDistrict = async (value) => {
+        let response = await userApi.getListDistrictByProvince({
+            access_token: getToken(), 
+            cityId: value
+        });
+        console.log("res district: ", response);
+
+        setAddressData((state) => ({
+            ...state,
+            districts: response?.map(item => ({id: item.districtId, name: item.districtName}))
+        }))
+    }
+
+    let getListWard = async (value) => {
+        let response = await userApi.getListWardByDistrict({
+            access_token: getToken(), 
+            districtId: value
+        });
+        console.log("res ward: ", response);
+
+        setAddressData((state) => ({
+            ...state,
+            wards: response?.map(item => ({id: item.wardId, name: item.wardName}))
+        }))
+    }
+
+    let getListHamlet = async (value) => {
+        let response = await userApi.getListHamletByWard({
+            access_token: getToken(), 
+            wardId: value
+        });
+        console.log("res hamlet: ", response);
+
+        setAddressData((state) => ({
+            ...state,
+            hamlets: response?.map(item => ({id: item.villageId, name: item.villageName}))
+        }))
+    }
+
+    let handleLocationChange = async (field, value, type) => {
+        console.log("change: ", value, type);
+        if(!value) {
+            if(landType === "native") {
+                if(type === "province") {
+                    setValue("provinceNativeExpand", value, {shouldValidate: true});
+                    setValue("districtNativeExpand", undefined, { shouldValidate: true });
+                    setValue("wardNativeExpand", undefined, { shouldValidate: true });
+                    setValue("hamletNativeExpand", undefined, { shouldValidate: true })
+                } else if(type === "district") {
+                    setValue("districtNativeExpand", value, { shouldValidate: true });
+                    setValue("wardNativeExpand", undefined, { shouldValidate: true });
+                    setValue("hamletNativeExpand", undefined, { shouldValidate: true });
+                } else if(type === "ward") {
+                    setValue("wardNativeExpand", value, { shouldValidate: true });
+                    setValue("hamletNativeExpand", undefined, { shouldValidate: true });
+                } else setValue("hamletNativeExpand", value, { shouldValidate: true });
+            } else if(landType === "regulary") {
+                if(type === "province") {
+                    setValue("provinceRegularyExpand", value, {shouldValidate: true});
+                    setValue("districtRegularyExpand", undefined, { shouldValidate: true });
+                    setValue("wardRegularyExpand", undefined, { shouldValidate: true });
+                    setValue("hamletRegularyExpand", undefined, { shouldValidate: true })
+                } else if(type === "district") {
+                    setValue("districtRegularyExpand", value, { shouldValidate: true });
+                    setValue("wardRegularyExpand", undefined, { shouldValidate: true });
+                    setValue("hamletRegularyExpand", undefined, { shouldValidate: true });
+                } else if(type === "ward") {
+                    setValue("wardRegularyExpand", value, { shouldValidate: true });
+                    setValue("hamletRegularyExpand", undefined, { shouldValidate: true });
+                } else setValue("hamletRegularyExpand", value, { shouldValidate: true });
+            }
+            
+        } else {
+            field.onChange(value);
+            if(type === "province" && value) {
+                await getListDistrict(value);
+            } else if(type === "district" && value) {
+                await getListWard(value);
+            } else if(type === "ward" && value) {
+                await getListHamlet(value);
+            } 
+        }
+        
+    }
+
+    useEffect(() => {
+        if (layoutType === "DECLARE") {
+            console.log("call in getListProvince in DECLARE");
+            getListProvince();
+        }
+
+        return () => {
+            if(landType === "regulary") {
+                unregister([
+                    "provinceRegularyExpand", 
+                    "districtRegularyExpand", 
+                    "wardRegularyExpand", 
+                    "hamletRegularyExpand"
+                ], {keepValue: false});
+            }
+        };
+    }, []);
+
+    let getListAddress = async () => {
+        if(landType === "native") {
+            let n = currentPersonInfo.peopleLocations.find(el => el.locationType === "quê quán");
+            await Promise.all([
+                getListProvince(),
+                getListDistrict(n.village.ward.district.city.cityId),
+                getListWard(n.village.ward.district.districtId),
+                getListHamlet(n.village.ward.wardId),
+            ]);
+
+            setValue("provinceNativeExpand", n.village.ward.district.city.cityId, { shouldValidate: true });
+            setValue("districtNativeExpand", n.village.ward.district.districtId, { shouldValidate: true });
+            setValue("wardNativeExpand", n.village.ward.wardId, { shouldValidate: true });
+            setValue("hamletNativeExpand", n.village.villageId, { shouldValidate: true });
+
+        } else if(landType === "regulary") {
+            if(currentPersonInfo.peopleLocations.length === 3) {
+                let r = currentPersonInfo.peopleLocations.find(el => el.locationType === "thường trú");
+                await Promise.all([
+                    getListProvince(),
+                    getListDistrict(r.village.ward.district.city.cityId),
+                    getListWard(r.village.ward.district.districtId),
+                    getListHamlet(r.village.ward.wardId),
+                ]);
+    
+                setValue("provinceRegularyExpand", r.village.ward.district.city.cityId, { shouldValidate: true });
+                setValue("districtRegularyExpand", r.village.ward.district.districtId, { shouldValidate: true });
+                setValue("wardRegularyExpand", r.village.ward.wardId, { shouldValidate: true });
+                setValue("hamletRegularyExpand", r.village.villageId, { shouldValidate: true });
+            } else if(currentPersonInfo?.peopleLocations.length === 2) {
+                console.log("call in regulary expand with length 2");
+                getListProvince();
+            }
+            
+        }
+    }
+
+    useEffect(() => {
+        if(layoutType === "EDIT" && currentPersonInfo) {
+            console.log("call in getListProvince in EDIT");
+            getListAddress();
+        }
+    }, [currentPersonInfo]);
 
     return (
         <div className={className}>
@@ -361,6 +741,7 @@ const ExpandLand = ({ control, errors, className, title, propChild }) => {
                             message={item.message}
                             data={handleAssignData(item?.type)}
                             placeholder={item.placeholder}
+                            handleChange={(field, value) => handleLocationChange(field, value, item?.type)}
                         />
                     </Col>
                 )}
@@ -369,21 +750,40 @@ const ExpandLand = ({ control, errors, className, title, propChild }) => {
     )
 }
 
-const StrictLand = ({ name, control, errors, message, title, placeholder}) => {
-    const [data, setData] = useState([{id: "01010101", name: "Tổ 1"}]);
+const StrictLand = ({ name, control, errors, message, title, placeholder, layoutType }) => {
+    const [data, setData] = useState([]);
+    const user = useSelector(state => state.user.userObj);
+
+    let getListWard = async () => {
+        let response = await userApi.getListHamletByWard({
+            access_token: getToken(), 
+            wardId: user?.username
+        });
+        console.log("res list ward in StrictLand: ", response);
+        setData([...response?.map(item => ({id: item.villageId, name: item.villageName}))])
+    ;}
+
+    useEffect(() => {
+        if(user?.username && user?.username?.length === 6) {
+            getListWard();
+        }
+    }, [user]);
 
     return (
         <div className="form-item-address-only">
             <h3>{title}<span className="text-danger">*</span></h3>
-            <Location 
-                name={name}
-                control={control}
-                message={message}
-                data={data}
-                placeholder={placeholder}
-                style={{width: '120px'}}
-            />
-            <span>{", xã Quỳnh Hoa, huyện Quỳnh Lưu, tỉnh Nghệ An"}</span>
+            {user?.userRole === "ROLE_B1" &&
+                <Location 
+                    name={name}
+                    control={control}
+                    message={message}
+                    data={data}
+                    placeholder={placeholder}
+                    style={{width: '120px'}}
+                    handleChange={(field, value) => field.onChange(value)}
+                />
+            }
+            <span> {` ${user?.location}`}</span>
             {errors[name] && <p className="err-msg">{errors[name]?.message}</p>}
         </div>
     )

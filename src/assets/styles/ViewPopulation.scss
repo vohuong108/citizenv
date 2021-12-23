@@ -6,7 +6,7 @@
 
         @include Responsive(xs) { font-size: 18px; }
     }
-    .name,.gender,.career {
+    .name,.gender,.career,.religion {
         text-transform: capitalize;
     }
 

@@ -28,8 +28,8 @@ function App() {
           <Route exact path="/declare" element={<PrivateRoute />}>
             <Route exact path='/declare' element={<Declare/>}/>
           </Route>
-          <Route exact path="/edit" element={<PrivateRoute />}>
-            <Route exact path='/edit' element={<Declare type="EDIT" />}/>
+          <Route exact path="/edit/:id" element={<PrivateRoute />}>
+            <Route exact path='/edit/:id' element={<Declare type="EDIT" />}/>
           </Route>
           
           <Route exact path="/dashboard" element={<Hompage />} >

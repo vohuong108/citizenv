@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getListAccount, changeAccountState } from './accountAction';
 
 const accountSlice = createSlice({
-    name: 'user',
+    name: 'account',
     initialState: {
         listAccount: [],
         loading: false,

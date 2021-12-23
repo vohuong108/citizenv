@@ -1,26 +1,79 @@
-import React, { useState } from 'react';
-import { Modal, Button, Divider, List, Popover } from 'antd';
+import React from 'react';
+import { Modal, Button, Divider, List, Popover, message } from 'antd';
 import { EyeOutlined, DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import userApi from '../../api/userApi';
+import { useSelector } from 'react-redux';
+import { getToken } from '../../utils/localStorageHandler';
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { getListPopulation } from '../../features/manager/population/populationAction';
+import qs from 'query-string';
 
-const ViewPersonal = ({role = 'B1'}) => {
+const ViewPersonal = ({ id }) => {
+    const user = useSelector(state => state.user.userObj);
+    const dispatch = useDispatch();
+    let location = useLocation();
 
-    const personalInfo = () => {
-        
+    const personalInfo = async () => {
+        let response = await userApi.viewPersonalInfo({
+            access_token: getToken(),
+            id: id
+        });
+        console.log("rview res: ", response);
         Modal.info({
             title: <><h3>Thông Tin Cá Nhân</h3><Divider /></>,
             content: (
                 <div>
-                    <p>Họ và tên</p>
-                    <p>Số CCCD/CMND</p>
-                    <p>Ngày sinh</p>
-                    <p>Giới tính</p>
-                    <p>Quê quán</p>
-                    <p>Địa chỉ thường trú</p>
-                    <p>Địa chỉ tạm trú</p>
-                    <p>Tôn giáo</p>
-                    <p>Trình độ văn hóa</p>
-                    <p>Nghề ngiệp</p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Họ Tên: </span>
+                        <span style={{textTransform: "capitalize"}}>{response?.name}</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Số CCCD/CMND: </span>
+                        <span style={{textTransform: "capitalize"}}>{response.cityId ? response.cityId : "Không có"}</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Ngày Sinh: </span>
+                        <span style={{textTransform: "capitalize"}}>{moment(response?.dateOfBirth, 'YYYY/MM/DD').format("DD/MM/YYYY")}</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Giới Tính: </span>
+                        <span style={{textTransform: "capitalize"}}>{response?.gender}</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Tôn Giáo: </span>
+                        <span style={{textTransform: "capitalize"}}>{response?.religion}</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Trình Độ Văn Hóa: </span>
+                        <span style={{textTransform: "capitalize"}}>{response?.educationLevel}</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Nghề Ngiệp: </span>
+                        <span style={{textTransform: "capitalize"}}>{response?.job ? response.job : "Không có"}</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Quê Quán: </span>
+                        <span style={{textTransform: "capitalize"}}>{
+                            response?.peopleLocations.find(el => el.locationType === "quê quán").locationName
+                        }</span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Địa Chỉ Thường Trú: </span>
+                        <span style={{textTransform: "capitalize"}}>
+                            {response?.peopleLocations.find(el => el.locationType === "thường trú").locationName}
+                        </span>
+                    </p>
+                    <p>
+                        <span style={{fontWeight: 500}}>Địa chỉ Tạm Trú: </span>
+                        <span style={{textTransform: "capitalize"}}>
+                        {response?.peopleLocations.find(el => el.locationType === "tạm trú") 
+                            ? response?.peopleLocations.find(el => el.locationType === "tạm trú").locationName
+                            : "Không có"
+                        }
+                        </span>
+                    </p>
                 </div>
             ),
             icon: null,
@@ -36,11 +89,34 @@ const ViewPersonal = ({role = 'B1'}) => {
             okText: 'Xóa',
             okType: 'danger',
             cancelText: 'Hủy',
-            onOk() {
-              console.log('OK');
+            onOk: async () => {
+                try {
+                    let response = await userApi.deletePersonalInfo({
+                        access_token: getToken(),
+                        id: id
+                    });
+
+                    let newRes = await dispatch(getListPopulation({
+                        access_token: getToken(),
+                        params: qs.parse(location?.search)
+                    }));
+
+                    console.log("new res: ", newRes);
+
+                    message.success({
+                        content: response,
+                        style: {marginTop: '72px'},
+                        key: "del-info-msg"
+                    })
+                } catch (error) {
+                    message.error({
+                        content: error.message,
+                        style: {marginTop: '72px'},
+                        key: "del-info-msg"
+                    })
+                }
             },
             onCancel() {
-              console.log('Cancel');
             },
         });
     }
@@ -53,7 +129,7 @@ const ViewPersonal = ({role = 'B1'}) => {
             </List.Item>
             <List.Item className="list-action-item">
                 <EditOutlined style={{marginRight: '4px'}}/>
-                <Link to="/edit" style={{color: '#000'}}>{"Chỉnh Sửa"}</Link>
+                <Link to={`/edit/${id}`} style={{color: '#000'}}>{"Chỉnh Sửa"}</Link>
             </List.Item>
             <List.Item className="list-action-item" onClick={() => deleteConfirm()}>
                 <DeleteOutlined style={{color: 'red', marginRight: '4px'}}/>
@@ -64,7 +140,7 @@ const ViewPersonal = ({role = 'B1'}) => {
 
     return (
         <>
-        {(role === 'ADMIN' || role === 'A1' || role === 'A2' || role === 'A3')
+        {(user?.userRole === 'ADMIN' || user?.userRole === 'A1' || user?.userRole === 'A2' || user?.userRole === 'A3')
             ? <Button
                 style={{borderRadius: '8px'}}
                 icon={<EyeOutlined style={{color: 'green'}}/>}
