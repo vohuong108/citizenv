@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 
-const final_base = "https://3115-2001-ee0-41a1-7427-14b3-9256-1847-2754.ngrok.io";
+const final_base = "https://892b-2001-ee0-41a1-7427-902d-5596-3a59-6129.ngrok.io";
 
 const userApi = {
     login: async (data) => {
@@ -310,7 +310,7 @@ const userApi = {
     },
     getDeclareProgress: async (data) => {
         const response = await axios({
-            url: `${final_base}/declarationtime/complete`,
+            url: `${final_base}/declarationtime`,
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${data.access_token}`,
@@ -320,6 +320,19 @@ const userApi = {
         
         return response.data;
     },
+    changePersonalPassword: async (data) => {
+        const response = await axios({
+            url: `${final_base}/user/edit/password`,
+            method: 'PUT',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: data.data
+        })
+        
+        return response.data;
+    }
 }
 
 export default userApi;

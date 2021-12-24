@@ -51,7 +51,7 @@ const UserAvatar = () => {
                         </a>
                         <Menu className="list-menu" >
                             <Menu.Item className="menu_item" key="account" icon={<UserOutlined width="20px"/>}>
-                                <Link to={`#`}>Hồ sơ của tôi </Link>  
+                                <Link to={`/profile`}>Hồ sơ của tôi </Link>  
                             </Menu.Item>
                             <Menu.Item className="menu_item" key="dashbroad" icon={<UserOutlined width="20px"/>}>
                                 <Link to={`dashboard/account`}>Trang quản lý </Link>  

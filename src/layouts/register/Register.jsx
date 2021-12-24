@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Divider, Input, Row, Col, Tag, DatePicker} from 'antd';
+import { Select, Divider, Input} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useForm, Controller } from "react-hook-form";
-import moment from "moment";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import userApi from '../../api/userApi';
 import { getToken } from '../../utils/localStorageHandler';
-import axios from 'axios';
+
 
 const Register = () => {
     const [accountLevel, setAccountLevel] = useState(null);
@@ -18,7 +17,8 @@ const Register = () => {
         let nextId = locationData.length;
         console.log("length locationData: ", nextId);
 
-        if(user?.userRole === "ROLE_A1") return String(nextId + 1).padStart(2, '0');
+        if(user?.userRole === "ROLE_ADMIN") return `minister${String(nextId + 1).padStart(2, '0')}`
+        else if(user?.userRole === "ROLE_A1") return String(nextId + 1).padStart(2, '0');
         else return `${user?.username}${String(nextId + 1).padStart(2, '0')}`;
         
     }
@@ -35,6 +35,8 @@ const Register = () => {
         
         console.log("response list location: ", temp)
         setLocationData([...temp]);
+
+        if(user?.userRole === "ROLE_ADMIN") setValue("username", `minister${String(temp.length + 1).padStart(2, '0')}`);
     }
 
     const onSubmit = async (data) => {
@@ -53,7 +55,9 @@ const Register = () => {
             let response = await userApi.register({access_token: token, data: data});
             console.log("response register: ", response);
 
-            let res_location = await getListLocation();
+            if(user?.userRole !== "ROLE_ADMIN" && user?.userRole !== "ROLE_B2") {
+                let res_location = await getListLocation();
+            }
             setValue("location", "");
             setValue("username", "");
         }
@@ -71,7 +75,7 @@ const Register = () => {
             setAccountLevel('Thôn/Bản/Tổ dân phố');
         }
 
-        getListLocation();
+        if(user) getListLocation();
 
     }, [user])
     return (
@@ -82,23 +86,27 @@ const Register = () => {
                 </div>
                 <div className="register-body">
                     <form id="form-register" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-                        <div className="form-item">
-                            <label className="label-select" >{accountLevel}</label>
-                            <Controller
-                                name="location"
-                                control={control}
-                                rules={{ required: "Vui lòng chọn đơn vị được cấp tài khoản."}}
-                                render={({ field }) =>
-                                    <SelectAppend 
-                                        data={locationData} 
-                                        nextId={handleNextId()} 
-                                        field={field} 
-                                        setValue={setValue}
-                                    />
-                                }
-                            />
-                        </div>
-                        {errors.location && <p className="err-msg">{errors.location.message}</p>}
+                        {(user?.userRole !== "ROLE_ADMIN" && user?.userRole !== "ROLE_B2") &&
+                            <>
+                            <div className="form-item">
+                                <label className="label-select" >{accountLevel}</label>
+                                <Controller
+                                    name="location"
+                                    control={control}
+                                    rules={{ required: "Vui lòng chọn đơn vị được cấp tài khoản."}}
+                                    render={({ field }) =>
+                                        <SelectAppend 
+                                            data={locationData} 
+                                            nextId={handleNextId()} 
+                                            field={field} 
+                                            setValue={setValue}
+                                        />
+                                    }
+                                />
+                            </div>
+                            {errors.location && <p className="err-msg">{errors.location.message}</p>}
+                            </>
+                        }
 
                         <div className="form-item">
                             <label>Tên đăng nhập</label>

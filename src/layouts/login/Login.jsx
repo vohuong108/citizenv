@@ -33,12 +33,15 @@ const Login = () => {
             else navigate('/dashboard/account');
 
         } catch (err) {
-            console.error("error in login: ", err)
-            message.error({
-                content: err.message,
-                style: {marginTop: '72px'},
-                key: "login-msg"
-            })
+            console.error("error in login: ", err);
+
+            if(err?.message === "Request failed with status code 401") {
+                message.error({
+                    content: "Tên đăng nhập hoặc mật khẩu không chính xác!",
+                    style: {marginTop: '72px'},
+                    key: "login-msg"
+                })
+            }
         }
     }
 

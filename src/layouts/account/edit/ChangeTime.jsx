@@ -64,7 +64,7 @@ const ChangeTime = ({ data, isMultiple }) => {
         if(!isMultiple) {
             if(data.start && data.end) {
                 setValue("startTime", moment.utc(data.start).local());
-                setValue("endTime", moment.utc(data.end).local())
+                setValue("endTime", moment.utc(data.end).local());
             }
         }
 

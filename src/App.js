@@ -12,6 +12,7 @@ import ViewPopulation from './layouts/view/ViewPopulation';
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';
 import Declare from './layouts/declare/Declare';
+import Profile from './layouts/profile/Profile';
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route exact path="/edit/:id" element={<PrivateRoute />}>
             <Route exact path='/edit/:id' element={<Declare type="EDIT" />}/>
+          </Route>
+          <Route exact path="/profile" element={<PrivateRoute />}>
+            <Route exact path='/profile' element={<Profile />}/>
           </Route>
           
           <Route exact path="/dashboard" element={<Hompage />} >

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Divider, Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd';
 import { Link, useLocation, useMatch} from 'react-router-dom';
 
 //import icon image
@@ -7,19 +7,19 @@ import { ReactComponent as ChartBar } from '../../assets/icons/chart-bar-regular
 import { ReactComponent as AccountIcon } from '../../assets/icons/user-friends-solid.svg';
 import { ReactComponent as PopIcon } from '../../assets/icons/address-book-solid.svg';
 
-const Slide = ({ course }) => {
+const Slide = () => {
     const [keySlide, setKeySlide] = useState(null);
-    const [collapsed, setCollapsed] = useState(false);
+    // const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
-    const match = useMatch("/home");
+    // const match = useMatch("/dashbroad");
 
     // console.log("home: ", location);
     // console.log("match: ", match?.pathnameBase);
 
     useEffect(() => {
-        if(location.pathname === '/home/account') setKeySlide("account")
-        else if(location.pathname === '/home/analysis') setKeySlide("analysis")
-        else if(location.pathname === '/home/population') setKeySlide("population")
+        if(location.pathname === '/dashboard/account') setKeySlide("account")
+        else if(location.pathname === '/dashboard/analysis') setKeySlide("analysis")
+        else if(location.pathname === '/dashboard/population') setKeySlide("population")
 
     }, [location])
 

@@ -149,8 +149,12 @@ const DeclareProgress = () => {
             let response = await userApi.getDeclareProgress({
                 access_token: getToken(),
             });
+            console.log("response getProgress: ", response);
 
-            // setProgress(response);
+            let l = response?.length;
+            let s = response?.filter(i => i.state === true).length;
+
+            setProgress((s/l*100).toFixed(0));
         }
 
         if((user?.userRole !== "ROLE_B1") && (user?.userRole !== "ROLE_B2")) {

@@ -89,7 +89,9 @@ const Account = () => {
     });
 
     let handleAccountLevel = () => {
-        if(user?.userRole === "ROLE_A1") {
+        if(user?.userRole == 'ROLE_ADMIN') {
+            return <>Bộ Y Tế</>
+        } else if(user?.userRole === "ROLE_A1") {
             return <>Tỉnh/Thành</>
         } else if(user?.userRole === "ROLE_A2") {
             return <>Quận/Huyện</>
@@ -104,7 +106,8 @@ const Account = () => {
         {
             title: 'Tên đơn vị',
             dataIndex: "location",
-            ...getColumnSearchProps("location")
+            ...getColumnSearchProps("location"),
+            render: (text) => text ? <>{text}</> : "Tổng Cục Dân Số"
         }, {
             title: 'Mã đơn vị',
             dataIndex: "username",
@@ -154,6 +157,7 @@ const Account = () => {
         }
 
         getAccountData();
+        setFilterData([...accountData]);
     }, [])
 
     return (

@@ -4,7 +4,7 @@ import { FileExcelOutlined, PrinterOutlined, PlusOutlined } from '@ant-design/ic
 import { CSVLink } from 'react-csv';
 
 const ExportData = ({ title = "", placement, data, type = "multiple"}) => {
-    // console.log("export data: ", data);
+    console.log("export data: ", data);
 
     const content = (
         <List className="list-export">
