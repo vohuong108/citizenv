@@ -37,13 +37,16 @@ const UserAvatar = () => {
                     <div className="pop-container">
                         <a className="account-info">
                             <Avatar 
-                                size={64} 
+                                size={60} 
                                 className="avt-user"
                                 src={AccountLogo}
+                                style={{
+                                    backgroundColor: '#87d068',
+                                }}
                             />
                             <div className="account-detail">
-                                <p>{19020318}</p>
-                                <p>{"Nghệ An"}</p>
+                                <p>{user?.username}</p>
+                                <p>{user?.userRole}</p>
                             </div>
                         </a>
                         <Menu className="list-menu" >

@@ -124,8 +124,8 @@ const MenuDrawerLeft = ({ history }) => {
                                         style={{backgroundColor: '#c6c4c4'}}
                                     />
                                     <div className="account-detail">
-                                        <p>{19020318}</p>
-                                        <p>{"Nghệ An"}</p>
+                                        <p>{user?.username}</p>
+                                        <p>{user?.userRole}</p>
                                     </div>
                                 </Link>
     

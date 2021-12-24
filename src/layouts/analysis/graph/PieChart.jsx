@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Pie } from '@ant-design/charts';
 
-const PieChart = () => {
-  const data = [
-    {
-      gender: 'nam',
-      value: 50,
-    },
-    {
-      gender: 'nữ',
-      value: 40,
-    },
-  ];
+const PieChart = ({ data = [] }) => {
   const config = {
     appendPadding: 10,
     data,
@@ -27,13 +17,19 @@ const PieChart = () => {
         textAlign: 'center',
       },
     },
+    meta: {
+      value: {
+          formatter: (v) => `${v} người`,
+      },
+    },
     interactions: [
       {
         type: 'element-active',
       },
     ],
     legend: {
-      position: 'top',
+      position: 'bottom',
+      layout: 'horizontal',
       offsetX: 0,
     }
   };

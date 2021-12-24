@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 
-const final_base = "https://34dc-2001-ee0-41a1-7427-88e6-791c-2e81-d5c9.ngrok.io";
+const final_base = "https://3115-2001-ee0-41a1-7427-14b3-9256-1847-2754.ngrok.io";
 
 const userApi = {
     login: async (data) => {
@@ -267,7 +267,59 @@ const userApi = {
             },
         })
         return response.data;
-    }
+    },
+    getAnalysisData: async (data) => {
+        const response = await axios({
+            url: `${final_base}/people/analysis`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            params: data.params,
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
+        })
+        
+        return response.data;
+    },
+    getDeclareState: async (data) => {
+        const response = await axios({
+            url: `${final_base}/declarationtime/state`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+        })
+        
+        return response.data;
+    },
+    changeDeclareState: async (data) => {
+        const response = await axios({
+            url: `${final_base}/declarationtime/complete/${data.newState}`,
+            method: 'PUT',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+        })
+        
+        return response.data;
+    },
+    getDeclareProgress: async (data) => {
+        const response = await axios({
+            url: `${final_base}/declarationtime/complete`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+        })
+        
+        return response.data;
+    },
 }
 
 export default userApi;

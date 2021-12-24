@@ -65,6 +65,35 @@
                 margin-bottom: 5px;
             }
         }
+    }
+
+    .top-wrap {
+        margin-bottom: 30px;
+    }
+
+    .graph {
+        margin-bottom: 30px;
         
+        .graph-wrap:hover {
+                --tw-scale-x: 1.01;
+                --tw-scale-y: 1.01;
+                --tw-shadow: 0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
+                box-shadow: var(--tw-ring-offset-shadow,0 0 transparent),var(--tw-ring-shadow,0 0 transparent),var(--tw-shadow);
+                --tw-translate-x: 0;
+                --tw-translate-y: 0;
+                --tw-rotate: 0;
+                --tw-skew-x: 0;
+                --tw-skew-y: 0;
+                transform: translateX(var(--tw-translate-x)) 
+                translateY(var(--tw-translate-y)) 
+                rotate(var(--tw-rotate)) 
+                skewX(var(--tw-skew-x)) 
+                skewY(var(--tw-skew-y)) 
+                scaleX(var(--tw-scale-x)) 
+                scaleY(var(--tw-scale-y));
+                transition-property: background-color,border-color,color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;
+                transition-duration: .3s;
+                transition-timing-function: cubic-bezier(.4,0,.2,1);
+        }
     }
 }

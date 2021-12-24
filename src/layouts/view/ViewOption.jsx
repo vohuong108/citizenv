@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import userApi from '../../api/userApi';
 import { getToken } from '../../utils/localStorageHandler';
 
-const ViewOption = ({ filterData, }) => {
+const ViewOption = ({ filterData, pathTarget = "/dashboard/population?"}) => {
     const user = useSelector(state => state.user.userObj);
     let location = useLocation();
     let navigate = useNavigate();
@@ -58,15 +58,18 @@ const ViewOption = ({ filterData, }) => {
         }
 
         const currentQuery = qs.parse(location.search);
-        let newParams = {
-            ...currentQuery,
-            ...params
+        if(filter?.level === "all") {
+            navigate(`${pathTarget}${qs.stringify(params)}`);
+        } else {
+            let newParams = {
+                ...currentQuery,
+                ...params
+            }
+            console.log("current query: ", currentQuery);
+            console.log("new query: ", qs.stringify(newParams));
+            
+            navigate(`${pathTarget}${qs.stringify(newParams)}`);
         }
-
-        console.log("current query: ", currentQuery);
-        console.log("new query: ", qs.stringify(newParams));
-        
-        navigate(`/dashboard/population?${qs.stringify(newParams)}`);
     }
 
     let handleChangeOptionItem = async (value, type) => {
