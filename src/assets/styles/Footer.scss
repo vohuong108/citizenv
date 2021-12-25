@@ -1,0 +1,45 @@
+.footer {
+    background-image: url(../image/footerL.jpg);
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 1.5rem;
+
+    .footer-container {
+        @include Responsive(xs) { --pd-x: 12px; }
+        @include Responsive(sm) { --pd-x: 10px; }
+        @include Responsive(md) { --pd-x: 14px; }
+        @include Responsive(xl) { --pd-x: 14px; }
+        
+        padding-left: var(--pd-x);
+        padding-right: var(--pd-x);
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .footer-wrap {
+        color: #fff;
+        font-family: "NotoSans", sans-serif !important;
+        h4 {
+            color: #fff;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        p {
+            margin-bottom: 5px;
+        }
+        .info {
+            text-align: left;
+            height: 100%;
+
+            @include Responsive(md) { text-align: center; }
+            @include Responsive(lg) { text-align: left; }
+        }
+        .contact {
+            text-align: left;
+            height: 100%;
+            @include Responsive(md) { text-align: center; }
+            @include Responsive(lg) { text-align: left; }
+        }
+    }
+}
