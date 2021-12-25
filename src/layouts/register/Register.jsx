@@ -5,6 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 import { useSelector } from 'react-redux';
 import userApi from '../../api/userApi';
 import { getToken } from '../../utils/localStorageHandler';
+import { removeAscent } from '../../utils/validate';
+import TipInput from '../../components/tooltip/TipInput';
 
 
 const Register = () => {
@@ -111,7 +113,11 @@ const Register = () => {
                         {(user?.userRole !== "ROLE_ADMIN" && user?.userRole !== "ROLE_B2") &&
                             <>
                             <div className="form-item">
-                                <label className="label-select" >{accountLevel}</label>
+                                <label className="label-select" >
+                                    {accountLevel}
+                                    {" "}
+                                    <TipInput content={"Tên đơn vị chỉ được bao gồm các ký tự a-z A-Z 0-9 và ký tự khoảng trắng"}/>
+                                    </label>
                                 <Controller
                                     name="location"
                                     control={control}
@@ -213,9 +219,12 @@ const SelectAppend = ({ data, nextId, setValue, field }) => {
                 <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
                 <Input 
                     style={{ flex: 'auto', textTransform: 'capitalize' }} 
-                    value={inputValue} 
+                    value={inputValue}
                     onChange={(e) => {
-                        setInputValue(e.target.value);
+                        let re = /^[a-zA-Z0-9 ]*$/g
+                        if(re.test(removeAscent(e.target.value))) {
+                            setInputValue(e.target.value);
+                        }
                     }}
                 />
                 <a

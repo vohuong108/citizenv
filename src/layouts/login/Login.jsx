@@ -13,6 +13,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 // import image
 import logo from "../../assets/image/logo.png";
+import TipInput from '../../components/tooltip/TipInput';
  
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -66,14 +67,25 @@ const Login = () => {
                                         <div className="inner-right">
                                             <h3>Đăng Nhập</h3>
                                             <form onSubmit={handleSubmit(onSubmit)}>
-                                                <label>Tên đăng nhập</label>
+                                                <label>
+                                                    {"Tên đăng nhập "} 
+                                                    <TipInput 
+                                                        content={"Tên đăng nhập chỉ gồm các ký tự: a-z A-Z 0-9"}
+                                                    />
+                                                </label>
                                                 <div className="input-wrap">
                                                     <UserOutlined className="input-icon" />
                                                     <input
                                                         id="username"
                                                         name="username" 
                                                         type="text"
-                                                        {...register("username")}
+                                                        {...register("username", {
+                                                            required: "Vui lòng nhập tên đăng nhập.",
+                                                            pattern: {
+                                                                message: "Vui lòng nhập đúng định dạng.",
+                                                                value: /^[a-zA-Z0-9]+$/i
+                                                            },
+                                                        })}
                                                         required 
                                                     />
                                                 </div>
@@ -85,8 +97,7 @@ const Login = () => {
                                                         name="password" 
                                                         type="password"
                                                         placeholder="Nhập mật khẩu" 
-                                                        {...register("password")}
-                                                        required 
+                                                        {...register("password", { required: "Vui lòng nhập mật khẩu"})}
                                                     />
                                                 </div>
 

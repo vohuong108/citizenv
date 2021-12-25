@@ -5,7 +5,7 @@ const populationSlice = createSlice({
     name: 'population',
     initialState: {
         listPopulation: [],
-        totalPage: 1,
+        totalPage: 2,
         loading: false,
         error: false,
         currentPerson: null

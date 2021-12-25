@@ -60,7 +60,7 @@
 
                 label {
                     display: block;
-                    width: 130px;
+                    width: 140px;
                     text-align: left;
                 }
 
@@ -118,7 +118,7 @@
                 text-align: left;
 
                 @include Responsive(sm) {
-                    margin-left: 130px;
+                    margin-left: 140px;
                 }
             }
         }

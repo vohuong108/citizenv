@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 
-const final_base = "https://326d-2001-ee0-41a1-7427-a877-49fb-f789-9f94.ngrok.io";
+const final_base = "https://7f7f-2001-ee0-41a1-7427-d8c1-85f6-eaac-6dd7.ngrok.io";
 
 const userApi = {
     login: async (data) => {

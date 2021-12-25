@@ -14,6 +14,8 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 const ViewPopulation = () => {
     const [filterData, setFilterData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const data = useSelector(state => state.population.listPopulation);
     const totalPage = useSelector(state => state.population.totalPage);
     const dispatch = useDispatch();
@@ -72,7 +74,7 @@ const ViewPopulation = () => {
         }
         
         navigate(`/dashboard/population?${qs.stringify(params)}`);
-    }
+    };
 
     useEffect(() => {
         let getData = async (params) => {
@@ -93,7 +95,9 @@ const ViewPopulation = () => {
             navigate(`/dashboard/population?${qs.stringify(params)}`, { replace: true });
             console.log("match in null")
         } else {
-            getData(qs.parse(location.search));
+            let params = qs.parse(location.search)
+            setCurrentPage(parseInt(params.page));
+            getData(params);
             console.log("match in not null")
         }
 
@@ -112,8 +116,10 @@ const ViewPopulation = () => {
                     rowKey="peopleId"
                     onChange={(a, b, c, extra) => handleTableChange(a, b, c, extra)}
                     pagination={{
-                        total: totalPage,
+                        total: totalPage*100,
                         defaultPageSize: 100,
+                        // defaultCurrent: 1,
+                        current: currentPage
                     }}
                 />
                 <Collapse 

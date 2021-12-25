@@ -31,7 +31,7 @@ const ViewPersonal = ({ id }) => {
                     </p>
                     <p>
                         <span style={{fontWeight: 500}}>Số CCCD/CMND: </span>
-                        <span style={{textTransform: "capitalize"}}>{response.cityId ? response.cityId : "Không có"}</span>
+                        <span style={{textTransform: "capitalize"}}>{response.citizenId ? response.citizenId : "Không có"}</span>
                     </p>
                     <p>
                         <span style={{fontWeight: 500}}>Ngày Sinh: </span>
@@ -127,14 +127,18 @@ const ViewPersonal = ({ id }) => {
                 <EyeOutlined style={{color: 'green', marginRight: '4px'}}/>
                 Xem
             </List.Item>
-            <List.Item className="list-action-item">
-                <EditOutlined style={{marginRight: '4px'}}/>
-                <Link to={`/edit/${id}`} style={{color: '#000'}}>{"Chỉnh Sửa"}</Link>
-            </List.Item>
-            <List.Item className="list-action-item" onClick={() => deleteConfirm()}>
-                <DeleteOutlined style={{color: 'red', marginRight: '4px'}}/>
-                Xóa
-            </List.Item>
+            {user?.userRole === "ROLE_B1" && 
+            <>
+                <List.Item className="list-action-item">
+                    <EditOutlined style={{marginRight: '4px'}}/>
+                    <Link to={`/edit/${id}`} style={{color: '#000'}}>{"Chỉnh Sửa"}</Link>
+                </List.Item>
+                <List.Item className="list-action-item" onClick={() => deleteConfirm()}>
+                    <DeleteOutlined style={{color: 'red', marginRight: '4px'}}/>
+                    Xóa
+                </List.Item>
+            </>
+            }
         </List>
     )
 

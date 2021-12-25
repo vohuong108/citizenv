@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getPersonInfo } from '../../features/manager/population/populationAction';
 import { unwrapResult } from '@reduxjs/toolkit';
+import TipInput from '../../components/tooltip/TipInput';
 
 function isFullnameValid (string) {
     var re = /^[a-zA-Z]{2,}(?: [a-zA-Z]+){1,}$/g // regex here
@@ -180,7 +181,17 @@ export default function Declare ({type = "DECLARE"}) {
                     >
                         <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label className="label-left" htmlFor="fullname">Họ và tên <span className="text-danger">*</span></label>
+                                <label className="label-left" htmlFor="fullname">
+                                    {"Họ và tên "}
+                                    <span className="text-danger">*</span>
+                                    <TipInput 
+                                        content={
+                                        "Họ Tên chỉ được phép gồm các ký tự a-z A-Z, " +
+                                        "phải ít nhất có 2 từ trong tên " + 
+                                        "và giữa các từ chỉ gồm một ký tự khoảng trắng"
+                                        }
+                                    />
+                                </label>
                                 <input 
                                     className="input-left" 
                                     style={{textTransform: "capitalize"}}
@@ -222,7 +233,10 @@ export default function Declare ({type = "DECLARE"}) {
                         </Col>
                         <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label className="label-left" htmlFor="personalId">Số CCCD/CMND</label>
+                                <label className="label-left" htmlFor="personalId">
+                                    {"Số CCCD/CMND "}
+                                    <TipInput content={"CMND chỉ gồm 9 số và CCCD chỉ gồm 12 chữ số"} />
+                                </label>
                                 <input 
                                 className="input-left" 
                                 id="personalId" 
@@ -240,7 +254,10 @@ export default function Declare ({type = "DECLARE"}) {
                         </Col>
                         <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label htmlFor="phone" >Số điện thoại</label>
+                                <label htmlFor="phone" >
+                                    {"Số điện thoại "}
+                                    <TipInput content={"Số điện thoại là loại gồm 9 chữ số"} />
+                                </label>
                                 <input 
                                 className="input-right" 
                                 id="phone" 
@@ -258,7 +275,11 @@ export default function Declare ({type = "DECLARE"}) {
 
                         <Col xs={24} sm={24} md={12}>
                             <div className="form-item-demographic">
-                                <label className="label-left" htmlFor="religion">Tôn giáo <span className="text-danger">*</span></label>
+                                <label className="label-left" htmlFor="religion">
+                                    {"Tôn giáo "}
+                                    <span className="text-danger">*</span>
+                                    <TipInput content={"Chỉ gồm các ký tự a-z A-Z và ký tự khoảng trắng"} />
+                                </label>
                                 <input 
                                     className="input-left" 
                                     id="religion" 
@@ -783,7 +804,7 @@ const StrictLand = ({ name, control, errors, message, title, placeholder, layout
                     handleChange={(field, value) => field.onChange(value)}
                 />
             }
-            <span> {` ${user?.location}`}</span>
+            <span style={{textTransform: "capitalize"}}> {` ${user?.location}`}</span>
             {errors[name] && <p className="err-msg">{errors[name]?.message}</p>}
         </div>
     )

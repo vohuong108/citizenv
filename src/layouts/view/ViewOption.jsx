@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Select, } from 'antd';
+import { Row, Col, Select, message} from 'antd';
 import ExportData from '../../components/export/ExportData';
 import { useLocation, useNavigate } from 'react-router-dom';
 import qs from 'query-string';
@@ -56,34 +56,79 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                 level: "all",
             }
         } else if(filter?.level === "province") {
-            params = {
-                locationIds: selectedProvince,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
-                level: "province"
+            if(selectedProvince.length > 0) {
+                params = {
+                    locationIds: selectedProvince,
+                    locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                    level: "province"
+                }
+            } else {
+                message.error({
+                    content: "Vui lòng chọn tỉnh/thành",
+                    style: {marginTop: '72px'},
+                    key: "filter-opt-msg"
+                });
+
+                return;
             }
         } else if(filter?.level === "district") {
-            params = {
-                locationIds: selectedDistrict,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
-                level: "district"
+            if(selectedDistrict.length > 0) {
+                params = {
+                    locationIds: selectedDistrict,
+                    locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                    level: "district"
+                }
+            } else {
+                message.error({
+                    content: "Vui lòng chọn huyện/quận",
+                    style: {marginTop: '72px'},
+                    key: "filter-opt-msg"
+                });
+
+                return;
             }
         } else if(filter?.level === "ward") {
-            params = {
-                locationIds: selectedWard,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
-                level: "ward"
+            if(selectedWard.length > 0) {
+                params = {
+                    locationIds: selectedWard,
+                    locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                    level: "ward"
+                }
+            } else {
+                message.error({
+                    content: "Vui lòng chọn xã/phường",
+                    style: {marginTop: '72px'},
+                    key: "filter-opt-msg"
+                });
+
+                return;
             }
         } else if(filter?.level === "hamlet") {
-            params = {
-                locationIds: selectedHamlet,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
-                level: "hamlet"
+            if(selectedHamlet.length > 0) {
+                params = {
+                    locationIds: selectedHamlet,
+                    locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                    level: "hamlet"
+                }
+            } else {
+                message.error({
+                    content: "Vui lòng chọn thôn/bản",
+                    style: {marginTop: '72px'},
+                    key: "filter-opt-msg"
+                });
+
+                return;
             }
         }
 
         const currentQuery = qs.parse(location.search);
         if(filter?.level === "all") {
-            navigate(`${pathTarget}${qs.stringify(params)}`);
+            let newParams = {
+                page: currentQuery.page,
+                size: currentQuery.size,
+                ...params,
+            }
+            navigate(`${pathTarget}${qs.stringify(newParams)}`);
         } else {
             let newParams = {
                 ...currentQuery,
@@ -226,7 +271,7 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                 setSelectedWard([]);
                 setSelectedHamlet([]);
             }
-            else if(level === "province") {
+            else if(level === "province" && locationIds) {
                 if(typeof(locationIds) === "string") {
                     setFilter((filter) => ({...filter, level: "province", address: locationType}));
                     setSelectedProvince([locationIds]);
@@ -237,7 +282,7 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                 setSelectedDistrict([]);
                 setSelectedWard([]);
                 setSelectedHamlet([]);
-            } else if(level === "district") {
+            } else if(level === "district" && locationIds) {
                 if(typeof(locationIds) === "string") {
                     setFilter((filter) => ({...filter, level: "district", address: locationType}));
                     setSelectedProvince([locationIds.slice(0, 2)]);
@@ -249,7 +294,7 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                 }
                 setSelectedWard([]);
                 setSelectedHamlet([]);
-            } else if(level === "ward") {
+            } else if(level === "ward" && locationIds) {
                 if(typeof(locationIds) === "string") {
                     setFilter((filter) => ({...filter, level: "ward", address: locationType}));
                     setSelectedProvince([locationIds.slice(0, 2)]);
@@ -262,7 +307,7 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                     setSelectedWard([...locationIds]);
                 }
                 setSelectedHamlet([]);
-            } else if(level === "hamlet") {
+            } else if(level === "hamlet" && locationIds) {
                 if(typeof(locationIds) === "string") {
                     console.log("in string")
                     setFilter((filter) => ({...filter, level: "hamlet", address: locationType}));
@@ -327,10 +372,15 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                     <Select 
                         mode='multiple'
                         value={selectedProvince}
+                        showSearch
                         maxTagCount='responsive'
                         style={{flex: 1, maxWidth: '500px'}}
                         onChange={(value) => handleChangeOptionItem(value, "province")}
                         options={provinceData}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     />
                 </Col>}
                 
@@ -342,11 +392,16 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                     <label className="opt-label">Huyện/Quận</label>
                     <Select 
                         mode='multiple'
+                        showSearch
                         value={selectedDistrict}
                         maxTagCount='responsive'
                         style={{flex: 1, maxWidth: '500px'}}
                         onChange={(value) => handleChangeOptionItem(value, "district")}
                         options={districtData}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     />
                 </Col>}
                 
@@ -357,11 +412,16 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                     <label className="opt-label">Xã/Phường</label>
                     <Select 
                         mode='multiple'
+                        showSearch
                         value={selectedWard}
                         maxTagCount='responsive'
                         style={{flex: 1, maxWidth: '500px'}}
                         onChange={(value) => handleChangeOptionItem(value, "ward")}
                         options={wardData}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     />
                 </Col>}
                 
@@ -370,11 +430,16 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
                     <label className="opt-label">Thôn/Bản</label>
                     <Select 
                         mode='multiple'
+                        showSearch
                         value={selectedHamlet}
                         maxTagCount='responsive'
                         style={{flex: 1, maxWidth: '500px'}}
                         onChange={(value) => handleChangeOptionItem(value, "hamlet")}
                         options={hamletData}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     />
                 </Col>}
             </Row>}
