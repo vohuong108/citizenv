@@ -9,6 +9,7 @@ import { getListPopulation } from '../../features/manager/population/populationA
 import qs from 'query-string';
 import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 const ViewPopulation = () => {
@@ -79,7 +80,7 @@ const ViewPopulation = () => {
                 access_token: getToken(), 
                 params: params
             }));
-            console.log("response list population: ", un_response);
+            console.log("response list population: ", unwrapResult(un_response));
         }
         
         console.log("location view: ", location);
@@ -89,7 +90,7 @@ const ViewPopulation = () => {
                 size: 100,
                 page: 1
             }
-            navigate(`/dashboard/population?${qs.stringify(params)}`);
+            navigate(`/dashboard/population?${qs.stringify(params)}`, { replace: true });
             console.log("match in null")
         } else {
             getData(qs.parse(location.search));
@@ -102,7 +103,7 @@ const ViewPopulation = () => {
         <div className="view-population">
             <h2>DANH SÁCH THÔNG TIN DÂN SỐ</h2>
             <div className="view-table-option-wrap">
-                <ViewOption filterData={filterData}/>
+                <ViewOption pathTarget="/dashboard/population?"/>
                 <Divider />
                 <Table
                     className="view-population-table"

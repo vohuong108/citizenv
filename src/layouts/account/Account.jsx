@@ -8,26 +8,12 @@ import { getToken } from '../../utils/localStorageHandler';
 import { useSelector, useDispatch } from 'react-redux';
 import { getListAccount } from '../../features/manager/account/accountAction';
 import moment from 'moment';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 //import icon and images
 import { EditOutlined } from '@ant-design/icons';
 import ExportData from '../../components/export/ExportData';
-
-const data = [
-    {name: 'Hà Nội', username: '01', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Hồ Chí Minh', username: '02', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "InActive"},
-    {name: 'Đà Nẵng', username: '03', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Huế', username: '04', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Ninh Bình', username: '05', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Lào Cai', username: '06', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Khánh Hòa', username: '07', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "InActive"},
-    {name: 'Ninh Thuận', username: '08', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Lâm Đồng', username: '09', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Quảng Bình', username: '10', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Quảng Trị', username: '11', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"},
-    {name: 'Thanh Hóa', username: '12', level: "Tỉnh", startTime: "09/12/2021", endTime: "19/12/2021", state: "Active"}
-]
 
 const Account = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -106,6 +92,7 @@ const Account = () => {
         {
             title: 'Tên đơn vị',
             dataIndex: "location",
+            className: "location",
             ...getColumnSearchProps("location"),
             render: (text) => text ? <>{text}</> : "Tổng Cục Dân Số"
         }, {
@@ -153,11 +140,12 @@ const Account = () => {
         let  getAccountData = async () => {
             let token = getToken();
             let response = await dispatch(getListAccount({access_token: token}));
-            console.log("response acc data: ", response);
+            console.log("response acc data: ", unwrapResult(response));
+            setFilterData([...unwrapResult(response)]);
         }
 
         getAccountData();
-        setFilterData([...accountData]);
+        
     }, [])
 
     return (
@@ -199,19 +187,29 @@ const Account = () => {
             >
                 {accountData?.map((item, ind) => 
                     <Collapse.Panel 
-                        style={{textAlign: 'left'}} 
-                        header={`${item.username} - ${item.name}`} 
+                        style={{textAlign: 'left', textTransform: 'capitalize'}} 
+                        header={`${item.location} - ${item.username}`} 
                         key={ind}
                     >
-                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Tên đơn vị: ${item.name}`}</p>
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Tên đơn vị: ${item.location}`}</p>
                         <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Mã đơn vị: ${item.username}`}</p>
                         <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Cấp bậc: ${item.level}`}</p>
-                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Bắt đầu khai báo: ${item.startTime}`}</p>
-                        <p style={{fontWeight: '500', marginBottom: '10px'}}>{`Kết thúc khai báo: ${item.endTime}`}</p>
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>
+                            {`Bắt đầu khai báo: ${item.start
+                                ? moment.utc(item.start).local().format('DD-MM-YYYY HH:mm:ss')
+                                : "Chưa xác định"
+                            }`}
+                        </p>
+                        <p style={{fontWeight: '500', marginBottom: '10px'}}>
+                            {`Kết thúc khai báo: ${item.end
+                                ? moment.utc(item.end).local().format('DD-MM-YYYY HH:mm:ss')
+                                : "Chưa xác định"
+                            }`}
+                        </p>
                         {item.state.toLocaleLowerCase() === 'active' 
                         ? <p style={{fontWeight: '500', marginBottom: '16px'}}>{"Trạng thái: "}<Tag color='cyan'>{item.state}</Tag></p>
                         : <p style={{fontWeight: '500', marginBottom: '16px'}}>{"Trạng thái: "}<Tag color='#f50'>{item.state}</Tag></p>}
-                        <EditAccount shape="default" icon={<EditOutlined />} />
+                        <EditAccount shape="default" icon={<EditOutlined />} data={item}/>
                     </Collapse.Panel>
                 )}
             </Collapse>

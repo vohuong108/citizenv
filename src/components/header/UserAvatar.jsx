@@ -53,9 +53,11 @@ const UserAvatar = () => {
                             <Menu.Item className="menu_item" key="account" icon={<UserOutlined width="20px"/>}>
                                 <Link to={`/profile`}>Hồ sơ của tôi </Link>  
                             </Menu.Item>
-                            <Menu.Item className="menu_item" key="dashbroad" icon={<UserOutlined width="20px"/>}>
-                                <Link to={`dashboard/account`}>Trang quản lý </Link>  
-                            </Menu.Item>
+                            {user?.userRole !== "ROLE_B2" &&
+                                <Menu.Item className="menu_item" key="dashbroad" icon={<UserOutlined width="20px"/>}>
+                                    <Link to={`dashboard/account`}>Trang quản lý </Link>  
+                                </Menu.Item>    
+                            }
                             <Menu.Item className="menu_item" key="population" icon={<QuestionCircleOutlined width="20px"/>}>
                                 <Link to={'#'}>Trợ giúp</Link>  
                             </Menu.Item>

@@ -15,11 +15,10 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import logo from "../../assets/image/logo.png";
  
 const Login = () => {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const dispatch = useDispatch();
     const loginLoading = useSelector(state => state.user.loginLoading);
     let navigate = useNavigate();
-    let location = useLocation();
 
     const onSubmit = async (data) => {
         try {
@@ -29,8 +28,11 @@ const Login = () => {
             console.log("response login data: ", un_login_res);
             setToken(un_login_res?.jwt);
             
-            if(location?.state) navigate(location.state.from.pathname)
-            else navigate('/dashboard/account');
+            if (un_login_res.userRole === "ROLE_B2") {
+                navigate('/declare');
+            } else {
+                navigate('/dashboard/account');
+            }
 
         } catch (err) {
             console.error("error in login: ", err);
@@ -75,6 +77,7 @@ const Login = () => {
                                                         required 
                                                     />
                                                 </div>
+                                                {errors.username && <p className="err-msg">{errors.username.message}</p>}
                                                 <label>Mật khẩu</label>
                                                 <div className="input-wrap">
                                                     <LockFilled className="input-icon" />

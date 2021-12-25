@@ -58,14 +58,18 @@ const Header = () => {
                     <div className="header-right">
                         {!user 
                             ? <div className="header-right__btn">
+                                {!getToken() && 
                                 <Link to="/login">
                                     <Button className="header-btn" type="primary" shape="round">Đăng Nhập</Button>
                                 </Link>
+                                }
                             </div>
                             : <div className="header-right__user">
-                                <Link className="declare-btn" to="/declare">
-                                    Khai Báo Thông Tin
-                                </Link>
+                                {(user?.userRole === "ROLE_B1" || user?.userRole === "ROLE_B2") &&
+                                    <Link className="declare-btn" to="/declare">
+                                        Khai Báo Thông Tin
+                                    </Link>
+                                }
                                 <UserAvatar />
                             </div>
                         }
@@ -133,7 +137,9 @@ const MenuDrawerLeft = ({ history }) => {
                             <div className="menu-features">
                                 <ul>
                                     <li><Link to="/profile">Hồ sơ của tôi</Link></li>
-                                    <li><Link to="/declare">Khai báo thông tin</Link></li>
+                                    {(user?.userRole === "ROLE_B1" || user?.userRole === "ROLE_B2") && 
+                                        <li><Link to="/declare">Khai báo thông tin</Link></li>
+                                    }
                                     <li onClick={handleLogOut}>Log out</li>
                                 </ul>
                             </div>
@@ -141,22 +147,28 @@ const MenuDrawerLeft = ({ history }) => {
 
                             <div className="menu-drawer-option">
                                 <Menu className="option-menu" onClick={handleClick}>
+                                {user?.userRole !== "ROLE_B2" &&
                                     <Menu.Item className="menu_item" key="account" icon={<AccountIcon width="20px"/>}>
                                         <Link to={`dashboard/account`}>Quản lý tài khoản</Link>  
                                     </Menu.Item>
+                                }
+                                {(user?.userRole !== "ROLE_ADMIN" && user?.userRole !== "ROLE_B2") && 
+                                <>
                                     <Menu.Item className="menu_item" key="analysis" icon={<ChartBar width="20px"/>}>
                                         <Link to={`dashboard/analysis`}>Số liệu phân tích</Link>  
                                     </Menu.Item>
                                     <Menu.Item className="menu_item" key="population" icon={<PopIcon width="20px"/>}>
                                         <Link to={`dashboard/population`}>Thông tin dân số</Link>  
                                     </Menu.Item>
+                                </>
+                                }
                                 </Menu>
                             </div>
                         </React.Fragment>
                         : <div className="menu-user-yet-login">
                             <ul>
                                 <li><Link to="/">Trang chủ</Link></li>
-                                <li><Link to="/login">Log in</Link></li>
+                                {!getToken() && <li><Link to="/login">Log in</Link></li>}
                             </ul>
                         </div>
                          

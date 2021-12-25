@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 
-const final_base = "https://892b-2001-ee0-41a1-7427-902d-5596-3a59-6129.ngrok.io";
+const final_base = "https://326d-2001-ee0-41a1-7427-a877-49fb-f789-9f94.ngrok.io";
 
 const userApi = {
     login: async (data) => {
@@ -329,6 +329,22 @@ const userApi = {
                 "Content-Type": "application/json"
             },
             data: data.data
+        })
+        
+        return response.data;
+    },
+    getCombineData: async (data) => {
+        const response = await axios({
+            url: `${final_base}/people/current`,
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+                "Content-Type": "application/json"
+            },
+            params: data.params,
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
         })
         
         return response.data;

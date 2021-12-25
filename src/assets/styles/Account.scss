@@ -88,6 +88,10 @@
         @include Responsive(xs) { display: none;}
         @include Responsive(sm) { display: none;}
         @include Responsive(md) { display: block;}
+
+        td.location {
+            text-transform: capitalize;
+        }
     }
 
     .edit-accounts {

@@ -7,21 +7,40 @@ import { useSelector, useDispatch } from 'react-redux';
 import userApi from '../../api/userApi';
 import { getToken } from '../../utils/localStorageHandler';
 
-const ViewOption = ({ filterData, pathTarget = "/dashboard/population?"}) => {
+const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) => {
     const user = useSelector(state => state.user.userObj);
     let location = useLocation();
     let navigate = useNavigate();
+
 
     const [filter, setFilter] = useState({
         level: "all",
         address: "tất cả"
     });
-    const [levelOptions, setLevelOptions] = useState([]);
+    const [levelOptions, setLevelOptions] = useState([
+        {value: "all", label: "Toàn quốc"}, 
+        {value: "province", label: "Tỉnh/thành"},
+        {value: "district", label: "Huyện/quận"},
+        {value: "ward", label: "Xã/phường"},
+        {value: "hamlet", label: "Thôn/bản"},
+    ]);
 
-    const [provinceData, setProvinceData] = useState([]);
-    const [districtData, setDistrictData] = useState([]);
-    const [wardData, setWardData] = useState([]);
-    const [hamletData, setHamletData] = useState([]);
+    const [provinceData, setProvinceData] = useState([
+        {value: "01", label: "Ha Noi"},
+        {value: "02", label: "Ho Chi Minh"},
+    ]);
+    const [districtData, setDistrictData] = useState([
+        {value: "0101", label: "Thanh Xuan"},
+        {value: "0102", label: "Ha Dong"},
+    ]);
+    const [wardData, setWardData] = useState([
+        {value: "010101", label: "Nhan Chinh"},
+        {value: "010102", label: "Nhan Hoa"},
+    ]);
+    const [hamletData, setHamletData] = useState([
+        {value: "01010101", label: "Thon 1"},
+        {value: "01010102", label: "Thon 2"},
+    ]);
 
     const [selectedProvince, setSelectedProvince] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState([]);
@@ -33,27 +52,32 @@ const ViewOption = ({ filterData, pathTarget = "/dashboard/population?"}) => {
 
         if(filter?.level === "all") {
             params = {
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address
+                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                level: "all",
             }
         } else if(filter?.level === "province") {
             params = {
                 locationIds: selectedProvince,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address
+                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                level: "province"
             }
         } else if(filter?.level === "district") {
             params = {
                 locationIds: selectedDistrict,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address
+                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                level: "district"
             }
         } else if(filter?.level === "ward") {
             params = {
                 locationIds: selectedWard,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address
+                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                level: "ward"
             }
         } else if(filter?.level === "hamlet") {
             params = {
                 locationIds: selectedHamlet,
-                locationType: filter?.address === "tất cả" ? undefined : filter?.address
+                locationType: filter?.address === "tất cả" ? undefined : filter?.address,
+                level: "hamlet"
             }
         }
 
@@ -73,7 +97,6 @@ const ViewOption = ({ filterData, pathTarget = "/dashboard/population?"}) => {
     }
 
     let handleChangeOptionItem = async (value, type) => {
-        console.log("change: ", value, type);
         if(type === "province") {
             setSelectedProvince([...value]);
             let params = {
@@ -185,7 +208,78 @@ const ViewOption = ({ filterData, pathTarget = "/dashboard/population?"}) => {
             getHamletData();
         }
 
-    }, [user])
+    }, [user]);
+
+    useEffect(() => {
+        if(location.search) {
+            let param = qs.parse(location.search);
+            console.log("param: ", param);
+            
+            let locationIds = param?.locationIds;
+            let locationType = param.locationType ? param.locationType : "tất cả";
+            let level = param?.level;
+
+            if(level === "all") {
+                setFilter((filter) => ({...filter, level: "all", address: locationType}))
+                setSelectedProvince([]);
+                setSelectedDistrict([]);
+                setSelectedWard([]);
+                setSelectedHamlet([]);
+            }
+            else if(level === "province") {
+                if(typeof(locationIds) === "string") {
+                    setFilter((filter) => ({...filter, level: "province", address: locationType}));
+                    setSelectedProvince([locationIds]);
+                } else {
+                    setFilter((filter) => ({...filter, level: "province", address: locationType}));
+                    setSelectedProvince([...locationIds]);
+                }
+                setSelectedDistrict([]);
+                setSelectedWard([]);
+                setSelectedHamlet([]);
+            } else if(level === "district") {
+                if(typeof(locationIds) === "string") {
+                    setFilter((filter) => ({...filter, level: "district", address: locationType}));
+                    setSelectedProvince([locationIds.slice(0, 2)]);
+                    setSelectedDistrict([locationIds]);
+                } else {
+                    setFilter((filter) => ({...filter, level: "district", address: locationType}))
+                    setSelectedProvince([...new Set(locationIds.map(i => i.slice(0, 2)))]);
+                    setSelectedDistrict([...locationIds]);
+                }
+                setSelectedWard([]);
+                setSelectedHamlet([]);
+            } else if(level === "ward") {
+                if(typeof(locationIds) === "string") {
+                    setFilter((filter) => ({...filter, level: "ward", address: locationType}));
+                    setSelectedProvince([locationIds.slice(0, 2)]);
+                    setSelectedDistrict([locationIds.slice(0, 4)]);
+                    setSelectedWard([locationIds]);
+                } else {
+                    setFilter((filter) => ({...filter, level: "ward", address: locationType}))
+                    setSelectedProvince([...new Set(locationIds.map(i => i.slice(0, 2)))]);
+                    setSelectedDistrict([...new Set(locationIds.map(i => i.slice(0, 4)))]);
+                    setSelectedWard([...locationIds]);
+                }
+                setSelectedHamlet([]);
+            } else if(level === "hamlet") {
+                if(typeof(locationIds) === "string") {
+                    console.log("in string")
+                    setFilter((filter) => ({...filter, level: "hamlet", address: locationType}));
+                    setSelectedProvince([locationIds.slice(0, 2)]);
+                    setSelectedDistrict([locationIds.slice(0, 4)]);
+                    setSelectedWard([locationIds.slice(0, 6)]);
+                    setSelectedHamlet([locationIds]);
+                } else {
+                    setFilter((filter) => ({...filter, level: "hamlet", address: locationType}))
+                    setSelectedProvince([...new Set(locationIds.map(i => i.slice(0, 2)))]);
+                    setSelectedDistrict([...new Set(locationIds.map(i => i.slice(0, 4)))]);
+                    setSelectedWard([...new Set(locationIds.map(i => i.slice(0, 6)))]);
+                    setSelectedHamlet([...locationIds]);
+                }
+            } 
+        }
+    }, [location.search])
 
     return (
         <div className="view-option">
@@ -220,9 +314,6 @@ const ViewOption = ({ filterData, pathTarget = "/dashboard/population?"}) => {
                 <Col className="level-col btn-col" >
                     <button className="btn-search" onClick={() => handleSearch()}>Tìm Kiếm</button>
                 </Col>
-                {/* <Col className="level-col export-col">
-                    <ExportData placement="bottomRight" data={filterData} type = "single"/>
-                </Col> */}
             </Row>
             {(filter?.level && filter?.level !== 'all') && 
             <Row className="view-option-row option-row" gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]}>
@@ -288,8 +379,7 @@ const ViewOption = ({ filterData, pathTarget = "/dashboard/population?"}) => {
                 </Col>}
             </Row>}
             <Row className="btn-row-xs" style={{alignItems: 'center'}}>
-                {/* <Col span={12}><ExportData placement="bottomRight" data={filterData} type = "single"/></Col> */}
-                <Col span={12}><button className="btn-search" onClick={() => handleSearch()}>Tìm Kiếm</button></Col>
+                <Col span={24}><button className="btn-search" onClick={() => handleSearch()}>Tìm Kiếm</button></Col>
             </Row>
         </div>
     )

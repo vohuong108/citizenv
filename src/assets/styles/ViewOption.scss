@@ -32,12 +32,12 @@
                 flex: 0 0 100%;
                 max-width: 100%;
             }
-            @include Responsive(sm) { 
-                display: block;
-                flex: 0 0 50%;
-                max-width: 50%;
-            }
-            @include Responsive(xl) { 
+            // @include Responsive(sm) { 
+            //     display: block;
+            //     flex: 0 0 50%;
+            //     max-width: 50%;
+            // }
+            @include Responsive(md) { 
                 display: block;
                 flex: inherit;
                 max-width: inherit;
@@ -46,6 +46,8 @@
     
         .btn-col {
             @include Responsive(xs) { display: none; }
+            @include Responsive(sm) { display: none; }
+            @include Responsive(md) { display: block; }
         }
     
         .level-col-select {
@@ -66,7 +68,7 @@
 
     .btn-row-xs {
         margin-top: 16px;
-        @include Responsive(sm) { display: none; }
+        @include Responsive(md) { display: none; }
     }
 
     .btn-search {

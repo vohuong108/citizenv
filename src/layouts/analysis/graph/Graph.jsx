@@ -119,18 +119,18 @@ const Graph = ({ data }) => {
     }
     return (
         <div className="graph">
-            <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 30 }, { xs: 21, sm: 16, md: 24, xl: 30 }]}>
-                <Col span={14}>
+            <Row gutter={[{ xs: 21, sm: 16, md: 24, xl: 24 }, { xs: 21, sm: 16, md: 24, xl: 24 }]}>
+                <Col xs={24} xl={14}>
                     <div className="analysis-wrap graph-wrap">
                         <BarChart data={data?.locationInfos}/>
                     </div>
                 </Col>
-                <Col span={5}>
+                <Col xs={24} sm={12} xl={5}>
                     <div className="analysis-wrap graph-wrap">
                         <PieChart data={handleGender(data)}/>
                     </div>
                 </Col>
-                <Col span={5}>
+                <Col xs={24} sm={12} xl={5}>
                     <div className="analysis-wrap graph-wrap">
                         <DonutChart 
                             titleGraph="Tỷ lệ nhóm tuổi dân số"
@@ -138,12 +138,12 @@ const Graph = ({ data }) => {
                         />
                     </div>
                 </Col>
-                <Col span={6}>
+                <Col xs={24} sm={14} xl={7}>
                     <div className="analysis-wrap graph-wrap">
                         <GroupBar data={handleAgeByGender(data)}/>
                     </div>
                 </Col>
-                <Col span={6}>
+                <Col xs={24} sm={10} xl={6}>
                     <div className="analysis-wrap graph-wrap">
                         <DonutChart 
                             titleGraph="Tỷ lệ trình độ dân số"
@@ -154,7 +154,7 @@ const Graph = ({ data }) => {
                         />
                     </div>
                 </Col>
-                <Col span={12}>
+                <Col xs={24} xl={11}>
                     <div className="analysis-wrap graph-wrap">
                         <HeatmapChart data={handleCorrelation(data)}/>
                     </div>

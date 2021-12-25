@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Divider, Input} from 'antd';
+import { Select, Divider, Input, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from 'react-redux';
@@ -39,27 +39,49 @@ const Register = () => {
         if(user?.userRole === "ROLE_ADMIN") setValue("username", `minister${String(temp.length + 1).padStart(2, '0')}`);
     }
 
-    const onSubmit = async (data) => {
-        console.log("data submit register: ", data);
+    const onSubmit = async (formData) => {
+        console.log("data submit register: ", formData);
         // console.log("data change time 1: ", data.release_date);
         // console.log("data change time 2: ", data.release_date.format());
         // console.log("data change time 3: ", moment.utc(data.release_date.format()).local());
-        if(data.password !== data.confirm) {
+        if(formData.password !== formData.confirm) {
             setError("confirm", {
                 type: "manual",
                 message: "Mật khẩu không khớp. Vui lòng nhập lại"
             });
 
         } else {
-            let token = getToken();
-            let response = await userApi.register({access_token: token, data: data});
-            console.log("response register: ", response);
-
-            if(user?.userRole !== "ROLE_ADMIN" && user?.userRole !== "ROLE_B2") {
-                let res_location = await getListLocation();
+            try {
+                let data = {
+                    location: formData?.location?.trim()?.toLowerCase(),
+                    password: formData.password,
+                    state: formData.state,
+                    username: formData.username
+                }
+                
+                let response = await userApi.register({access_token: getToken(), data: data});
+                console.log("response register: ", response);
+    
+                if(response?.username) {
+                    message.success({
+                        content: "Cấp tài khoản thành công",
+                        style: {marginTop: '72px'},
+                        key: "register-msg"
+                    });
+                }
+    
+                if(user?.userRole !== "ROLE_ADMIN" && user?.userRole !== "ROLE_B2") {
+                    let res_location = await getListLocation();
+                }
+                setValue("location", "");
+                setValue("username", "");
+            } catch (err) {
+                message.error({
+                    content: err.message,
+                    style: {marginTop: '72px'},
+                    key: "register-msg"
+                });
             }
-            setValue("location", "");
-            setValue("username", "");
         }
     }
 
