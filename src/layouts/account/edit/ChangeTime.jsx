@@ -126,13 +126,13 @@ const ChangeTime = ({ data, isMultiple }) => {
                     <p>Thay đổi thời gian khai báo</p>
                 </div>
                 <div className="change-time-body">
-                    <form id="form-change-time" onSubmit={handleSubmit(onSubmit)} >
+                    <form onSubmit={handleSubmit(onSubmit)} >
                         <div className="form-item">
                             <Tag color="cyan" className="start-label">Ngày bắt đầu </Tag>
                             <Controller
                                 name="startTime"
                                 control={control}
-                                rules={{ required: true, message: "Vui lòng chọn ngày bắt đầu!" }}
+                                rules={{ required: "Vui lòng chọn ngày bắt đầu!" }}
                                 render={({ field }) => 
                                     <DatePicker 
                                         className="change-time-date-picker" 
@@ -151,7 +151,7 @@ const ChangeTime = ({ data, isMultiple }) => {
                             <Controller
                                 name="endTime"
                                 control={control}
-                                rules={{ required: true, message: "Vui lòng chọn ngày kết thúc!" }}
+                                rules={{ required: "Vui lòng chọn ngày kết thúc!" }}
                                 render={({ field }) => 
                                     <DatePicker 
                                         className="change-time-date-picker"

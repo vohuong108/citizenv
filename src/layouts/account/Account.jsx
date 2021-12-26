@@ -169,7 +169,7 @@ const Account = () => {
                             <button className="btn-create-account">Cấp tài khoản</button>
                         </Link>
                     }
-                    <ExportData placement="bottomRight" data={filterData}/>
+                    <ExportData placement="bottomRight" data={filterData} layout="ACCOUNT"/>
                 </Col>
             </Row>
             <Table

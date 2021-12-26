@@ -10,7 +10,8 @@ const Profile = () => {
     const user = useSelector(state => state.user.userObj);
 
     let handleLevel = (value) => {
-        if(value === "ROLE_A1") return "Bộ y tế"
+        if(value === "ROLE_ADMIN") return "Quản trị viên"
+        else if(value === "ROLE_A1") return "Bộ y tế"
         else if(value === "ROLE_A2") return "Tỉnh/Thành phố"
         else if(value === "ROLE_A3") return "Huyện/Quận"
         else if(value === "ROLE_B1") return "Xã/Phường"
@@ -18,7 +19,8 @@ const Profile = () => {
     }
 
     let handleUnit = (user) => {
-        if(user?.userRole === "ROLE_A1") return "Tổng cục dân số"
+        if(user?.userRole === "ROLE_ADMIN") return "Hệ Thống"
+        else if(user?.userRole === "ROLE_A1") return "Tổng cục dân số"
         else return user?.location
     }
 
@@ -93,7 +95,7 @@ const ChangePass = () => {
                     });
                 } else {
                     message.success({
-                        content: response.message,
+                        content: response,
                         style: {marginTop: '72px'},
                         key: "change-personal-pass-msg"
                     });

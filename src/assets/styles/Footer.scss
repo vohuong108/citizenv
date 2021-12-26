@@ -31,6 +31,7 @@
         .info {
             text-align: left;
             height: 100%;
+            display: inline-block;
 
             @include Responsive(md) { text-align: center; }
             @include Responsive(lg) { text-align: left; }
@@ -38,6 +39,7 @@
         .contact {
             text-align: left;
             height: 100%;
+            display: inline-block;
             @include Responsive(md) { text-align: center; }
             @include Responsive(lg) { text-align: left; }
         }

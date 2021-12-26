@@ -304,7 +304,7 @@ const CombineTable = ({ declareState }) => {
     return (
         <div className="combine-data-wrap">
             <div className="combine-header">
-                <ExportData type="single" placement="bottomRight" data={filterData}/>
+                <ExportData type="single" placement="bottomRight" data={filterData} layout="COMBINE"/>
             </div>
             <Table 
                 className="combine-table"

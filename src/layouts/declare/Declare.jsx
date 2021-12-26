@@ -14,6 +14,8 @@ import { useParams } from 'react-router-dom';
 import { getPersonInfo } from '../../features/manager/population/populationAction';
 import { unwrapResult } from '@reduxjs/toolkit';
 import TipInput from '../../components/tooltip/TipInput';
+import { Link } from 'react-router-dom';
+
 
 function isFullnameValid (string) {
     var re = /^[a-zA-Z]{2,}(?: [a-zA-Z]+){1,}$/g // regex here
@@ -256,7 +258,7 @@ export default function Declare ({type = "DECLARE"}) {
                             <div className="form-item-demographic">
                                 <label htmlFor="phone" >
                                     {"Số điện thoại "}
-                                    <TipInput content={"Số điện thoại là loại gồm 9 chữ số"} />
+                                    <TipInput content={"Số điện thoại là loại gồm 10 chữ số"} />
                                 </label>
                                 <input 
                                 className="input-right" 
@@ -368,7 +370,7 @@ export default function Declare ({type = "DECLARE"}) {
                         <input value={type === "EDIT" ? "Cập Nhật" : "Kê Khai Thông Tin"} type="submit" />
                         {type !== "EDIT" && 
                             <Button className="btn-download-form" icon={<DownloadOutlined  />}>
-                                <a href="../../assets/file/ToKhai.docx" download> Mẫu Khai Báo</a>
+                                <Link to="/file/tokhai.docx" target="_blank" download> Mẫu Khai Báo</Link>
                             </Button>
                         }
                     </div>

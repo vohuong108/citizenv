@@ -17,30 +17,12 @@ const ViewOption = ({ filterData = [], pathTarget = "/dashboard/population?"}) =
         level: "all",
         address: "tất cả"
     });
-    const [levelOptions, setLevelOptions] = useState([
-        {value: "all", label: "Toàn quốc"}, 
-        {value: "province", label: "Tỉnh/thành"},
-        {value: "district", label: "Huyện/quận"},
-        {value: "ward", label: "Xã/phường"},
-        {value: "hamlet", label: "Thôn/bản"},
-    ]);
+    const [levelOptions, setLevelOptions] = useState([]);
 
-    const [provinceData, setProvinceData] = useState([
-        {value: "01", label: "Ha Noi"},
-        {value: "02", label: "Ho Chi Minh"},
-    ]);
-    const [districtData, setDistrictData] = useState([
-        {value: "0101", label: "Thanh Xuan"},
-        {value: "0102", label: "Ha Dong"},
-    ]);
-    const [wardData, setWardData] = useState([
-        {value: "010101", label: "Nhan Chinh"},
-        {value: "010102", label: "Nhan Hoa"},
-    ]);
-    const [hamletData, setHamletData] = useState([
-        {value: "01010101", label: "Thon 1"},
-        {value: "01010102", label: "Thon 2"},
-    ]);
+    const [provinceData, setProvinceData] = useState([]);
+    const [districtData, setDistrictData] = useState([]);
+    const [wardData, setWardData] = useState([]);
+    const [hamletData, setHamletData] = useState([]);
 
     const [selectedProvince, setSelectedProvince] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState([]);
